@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="/Frontend/Pet_Projects/Dev_Portfolio_Project/HTML-CSS/PY_JS_Cheatsheets/style/prism.css" rel="stylesheet" />
+    <link href="/Frontend/Pet_Projects/Dev_Portfolio_Project/HTML-CSS/PY_JS_Cheatsheets/style/main.css" rel="stylesheet" />
+    <title>List / Array Cheatsheet</title>
+</head>
+<body>
+    <!-- <pre><code class="language-html">...</code></pre> -->
+    <nav></nav>
+    <main>
+        <div id="lang_headers">
+            <div class="page_header" id="PY_header"></div>
+            <div class="page_header" id="JS_header"></div>
+        </div>
+        <div id="lang_facts" class="row">
+            <div class="facts" id="PY_facts"></div>
+            <div class="facts" id="JS_facts"></div>
+        </div>
+        <div id="tasks_menu" class="row">
+            <div class="menu" id="PY_tasks"></div>
+            <div class="menu" id="JS_tasks"></div>
+        </div>
+        <div id="task_1" class="row">
+            <div class="task" id="PY_task_1">
+                <div class="task_header">
+                    <h3>Create a list:</h3>
+                </div>
+                <div class="task_codeblock task_code_PY">
+                    <pre><code class="language-python">
+old_list = [item_1, item_2, item_3]
+
+# or from a range:
+                        
+new_list = list(range(start, stop, stepover))
+                        
+# stepover - is "take every N-th element from the start"
+                    </code></pre>
+                </div>
+            </div>
+            
+            <div class="task" id="JS_task_1">
+                <div class="task_header">
+                    <h3>Create an array:</h3>
+                </div>
+                <div class="task_codeblock task_code_JS">
+                    <pre><code class="language-javascript">
+// Old way:
+
+const array_name = new Array(item1, item2, item3);
+
+// It is not recommended, because array_name = new Array(10); 
+// This will create an array with 10 undefined elements.
+                        
+// New way:
+
+const array_name = [item1, item2, item3];
+
+// or with an empty array and indexes:
+                        
+const array_name = [];
+array_name[0] = item1;
+array_name[1] = item2;
+array_name[2] = item3;
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="task_2" class="row">
+            <div class="task" id="PY_task_2">
+                <div class="task_header">
+                    <h3>Create a list from a slice:</h3>
+                </div>
+                <div class="task_codeblock task_code_PY">
+                    <pre><code class="language-python">
+                        # Returns part of the list starting from the item with the specified index
+                        # The right index of the slice (or the right element in a range) is never included into the range
+
+                        new_list = old_list[start:stop:step]
+
+                        new_list = old_list[-3:] # everything that is at the right of the item with index -3
+                        new_list = old_list[:-3] # everything that is at the left of the item with index -3
+
+                        # Also you can create a reversed list:
+
+                        new_list = old_list[::-1]
+                    </code></pre>
+                </div>
+            </div>
+            <div class="task" id="JS_task_2">
+                <div class="task_header">
+                    <h3></h3>
+                </div>
+                <div class="task_codeblock task_code_JS">
+                    <pre><code class="language-javascript">
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="task_3"  class="row">
+            <div class="task" id="PY_task_3">
+                <div class="task_header">
+                    <h3>Create a list using list comprehension:</h3>
+                </div>
+                <div class="task_codeblock task_code_PY">
+                    <pre><code class="language-python">
+                        my_list = [item/expession for item in iterable if condition]
+                    </code></pre>
+                </div>
+            </div>
+            <div class="task" id="JS_task_3">
+                <div class="task_header">
+                    <h3></h3>
+                </div>
+                <div class="task_codeblock task_code_JS">
+                    <pre><code class="language-javascript">
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="task_4" class="row">
+            <div class="task" id="PY_task_4">
+                <div class="task_header">
+                    <h3>Copy a list:</h3>
+                </div>
+                <div class="task_codeblock task_code_PY">
+                    <pre><code class="language-python">
+                        copy_list = old_list.copy()
+
+                        # or with a slice
+                        
+                        new_list = old_list[:]
+                    </code></pre>
+                </div>
+            </div>
+            <div class="task" id="JS_task_4">
+                <div class="task_header">
+                    <h3></h3>
+                </div>
+                <div class="task_codeblock task_code_JS">
+                    <pre><code class="language-javascript">
+                        
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="task_5" class="row">
+            <div class="task" id="PY_task_5">
+                <div class="task_header">
+                    <h3>Clear a list:</h3>
+                </div>
+                <div class="task_codeblock task_code_PY">
+                    <pre><code class="language-python">
+                        # clear the list by replacing all the elements with an empty list
+
+                        old_list[:] = []
+                        
+                        # or
+                        
+                        old_list.clear()
+                        
+                        # or
+                        
+                        del old_list[:]
+                    </code></pre>
+                </div>
+            </div>
+            <div class="task" id="JS_task_5">
+                <div class="task_header">
+                    <h3></h3>
+                </div>
+                <div class="task_codeblock task_code_JS">
+                    <pre><code class="language-javascript">
+
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="task_6" class="row">
+            <div class="task" id="PY_task_6">
+                <div class="task_header">
+                    <h3>Add new item to the list:</h3>
+                </div>
+                <div class="task_codeblock task_code_PY">
+                    <pre><code class="language-python">
+                        old_list.append(new_item)
+
+                        # or inserts an element into the list at the provided index
+                        
+                        old_list.insert(index, new_item)
+                    </code></pre>
+                </div>
+            </div>
+            <div class="task" id="JS_task_6">
+                <div class="task_header">
+                    <h3></h3>
+                </div>
+                <div class="task_codeblock task_code_JS">
+                    <pre><code class="language-javascript">
+
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <script src="/Frontend/Pet_Projects/Dev_Portfolio_Project/HTML-CSS/PY_JS_Cheatsheets/script/prism.js"></script>
+</body>
+</html>

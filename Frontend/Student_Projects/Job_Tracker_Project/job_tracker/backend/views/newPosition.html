@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding a Position</title>
+</head>
+<body>
+    <header>
+        <nav>
+
+        </nav>
+    </header>
+    <main>
+        <div id="add-new-position"> 
+            <h1>Add a Position</h1>
+            <form id="addPositionForm" action="/position" method="POST">
+                <div id="companyList" class="form-control">
+                    <label for="companyDropdown">Select Company:</label>
+                    <select id="companyDropdown" name="company" onchange="handleDropdownChange(this)">
+                     <!-- Options will be dynamically added here -->
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="positionURL">Position URL:</label>
+                    <input type="text" id="positionURL" name="positionURL" required>
+                </div>
+                <div class="form-control">
+                    <label for="positionName">Position Name:</label>
+                    <input type="text" id="positionName" name="positionName" required>
+                </div>
+                <div class="form-control">
+                    <label for="requirements">Requirements:</label>
+                    <textarea id="requirements" name="requirements" rows="5" cols="140"></textarea>
+                </div>
+                <div class="form-control">
+                    <label for="keywords">Keywords:</label>
+                    <textarea id="keywords" name="keywords" rows="5" cols="140"></textarea>
+                </div>
+                <div class="form-control">
+                    <label for="discoveryDate">Discovery Date:</label>
+                    <input type="text" id="discoveryDate" name="discoveryDate" required>
+                </div>
+                <button class="btn" type="submit" id="saveNewPosition">SAVE</button>
+            </form>
+            <div id="saveFeedback"></div>
+
+        </div>
+    </main>
+    <script type="text/javascript" src="/scripts/addnewposition.js"></script>
+</body>
+</html>

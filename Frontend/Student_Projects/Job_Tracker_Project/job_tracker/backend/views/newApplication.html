@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding an Application</title>
+</head>
+<body>
+    <header>
+        <nav>
+
+        </nav>
+    </header>
+    <main>
+        <div id="add-new-application"> 
+            <h1>Add an Application</h1>
+            <form id="addApplicationForm" action="/application" method="POST">
+                <div id="positionList" class="form-control">
+                    <label for="positionDropdown">Select Position:</label>
+                    <select id="positionDropdown" name="position" onchange="handleDropdownChange(this)">
+                     <!-- Options will be dynamically added here -->
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="applicationStatus">Application Status:</label>
+                    <input type="text" id="applicationStatus" name="applicationStatus" required>
+                </div>
+                <div class="form-control">
+                    <label for="sendDate">Send Date:</label>
+                    <input type="text" id="sendDate" name="sendDate" required>
+                </div>
+                <div class="form-control">
+                    <label for="applicationComments">Comments:</label>
+                    <textarea id="applicationComments" name="applicationComments" rows="5" cols="140"></textarea>
+                </div>
+                <button class="btn" type="submit" id="saveNewApplication">SAVE</button>
+            </form>
+            <div id="saveFeedback"></div>
+
+        </div>
+    </main>
+    <script type="text/javascript" src="/scripts/addnewapplication.js"></script>
+</body>
+</html>

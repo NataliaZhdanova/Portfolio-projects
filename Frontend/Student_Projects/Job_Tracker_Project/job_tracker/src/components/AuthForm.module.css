@@ -1,0 +1,76 @@
+body {
+    background-color: teal;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+main {
+    background-color: white;
+    margin-top: 200px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: teal;
+}
+
+.form {
+    max-width: 40rem;
+    margin: 2rem auto;
+    width: 400px;
+    margin: 40px;
+  }
+
+.regsection {
+    background-color:ghostwhite;
+    border-radius: 8px;
+}
+  
+  .form label,
+  .form input,
+  .form textarea {
+    display: block;
+    width: 100%;
+    font-weight: 700;
+  }
+  
+  .form input,
+  .form textarea {
+    font: inherit;
+    padding: 0.25rem;
+    border: 1px solid teal;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .btn {
+    font: inherit;
+    cursor: pointer;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    background-color: teal;
+    color: white;
+    border: 2px solid teal;
+    font-weight: 700;
+  }
+  
+  
+  .btn:hover {
+    background-color: white;
+    color: teal;
+    border: 2px solid teal;
+    border-radius: 4px;
+  }
+  
