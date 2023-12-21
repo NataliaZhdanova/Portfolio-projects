@@ -1,11 +1,14 @@
+// Authentication is handled by the following files:
+// /pages/Authentication.js - displays components and sends data to the server
+// /components/AuthForm.js - login component, only HTML
+// /components/RegForm.js - registration component, only HTML
+// /backend/server.js - keeps session middleware
+// /backend/routes/userRegLog.js - (this file) - router
+// /backend/models/user.js - user model keeps the CRUD DB logic
+// /backend/controllers/users.js - keeps the login/registration data processing logic and creates a session
+
 import express from "express";
 import { showAuthPage, regUser, loginUser } from "../controllers/users.js"
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const userRouter = express.Router();
 
@@ -14,17 +17,5 @@ userRouter.get("/", showAuthPage);
 userRouter.post("/register", regUser);
 
 userRouter.post("/login", loginUser);
-
-// userRouter.get("/login", async (req, res) => {
-//     const isLoggedIn = req
-//         .get("Cookie")
-//         .split(";")[1]
-//         .trim()
-//         .split("=")[1];
-//     if (!isLoggedIn) {
-//         return res.sendFile(path.join(__dirname, "..", "views", "auth.html"));
-//         } 
-//     res.sendFile(path.join(__dirname, "..", "views", "dashboard.html"));
-// });
 
 export default userRouter;

@@ -19,7 +19,8 @@ const db = knex({
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       port: process.env.DB_PORT
-    }
+    },
+    pool: { min: 0, max: 5, idleTimeoutMillis: 10000, reapIntervalMillis: 1000 }
   });
 
 export function showCompaniesPage(req, res, next) {

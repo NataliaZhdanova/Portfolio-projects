@@ -1,3 +1,12 @@
+// Authentication is handled by the following files:
+// /pages/Authentication.js - displays components and sends data to the server
+// /components/AuthForm.js - login component, only HTML
+// /components/RegForm.js - registration component, only HTML
+// /backend/server.js - keeps session middleware
+// /backend/routes/userRegLog.js - router
+// /backend/models/user.js - user model keeps the CRUD DB logic
+// /backend/controllers/users.js - (this file) - keeps the login/registration data processing logic and creates a session
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -20,7 +29,8 @@ const db = knex({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     port: process.env.DB_PORT
-  }
+  },
+  pool: { min: 0, max: 5, idleTimeoutMillis: 10000, reapIntervalMillis: 1000 }
 });
 
 

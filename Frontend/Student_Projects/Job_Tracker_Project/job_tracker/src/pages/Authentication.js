@@ -1,3 +1,12 @@
+// Authentication is handled by the following files:
+// /pages/Authentication.js - (this file) - displays components and sends data to the server
+// /components/AuthForm.js - login component, only HTML
+// /components/RegForm.js - registration component, only HTML
+// /backend/server.js - keeps session middleware
+// /backend/routes/userRegLog.js - router
+// /backend/models/user.js - user model keeps the CRUD DB logic
+// /backend/controllers/users.js - keeps the login/registration data processing logic and creates a session
+
 import AuthForm from "../components/AuthForm";
 import RegForm from "../components/RegForm";
 import { redirect } from "react-router-dom";
