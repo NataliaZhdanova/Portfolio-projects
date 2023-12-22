@@ -3,6 +3,7 @@ import AllApplications from "../components/AllApplications";
 import NavBar from "../components/NavBar";
 import { redirect } from "react-router-dom";
 
+
 function ApplicationsPage() {
   
  return (

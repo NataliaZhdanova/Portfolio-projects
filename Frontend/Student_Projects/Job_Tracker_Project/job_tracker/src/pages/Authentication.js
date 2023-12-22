@@ -10,10 +10,11 @@
 import AuthForm from "../components/AuthForm";
 import RegForm from "../components/RegForm";
 import { redirect } from "react-router-dom";
+import classes from "../components/AuthForm.module.css";
 
 function AuthenticationPage() {
   return (
-    <main id="reglog">
+    <main className="reglog">
       <AuthForm />
       <RegForm />
     </main>

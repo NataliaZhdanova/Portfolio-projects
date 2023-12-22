@@ -8,7 +8,6 @@
 // /backend/controllers/users.js - keeps the login/registration data processing logic and creates a session
 
 import { Form } from 'react-router-dom';
-
 import classes from "./AuthForm.module.css";
 
 function AuthForm() {
