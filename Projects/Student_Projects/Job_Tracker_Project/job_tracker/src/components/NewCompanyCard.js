@@ -1,9 +1,15 @@
-import { Form } from 'react-router-dom';
-
+import { Form, useSubmit } from 'react-router-dom';
 import classes from "./NewCompanyForm.module.css";
 
 function NewCompanyForm({ onCancel }) {
-  return (
+    const submit = useSubmit();
+    const handleSubmit = (e) => {
+    e.preventDefault();
+ 
+    submit(e.currentTarget.form);
+    e.currentTarget.form.reset();
+  };
+    return (
       <div className={classes.addnewform}>
         <h1>Add new Company</h1>
             <Form id="newCompanyForm"  action="/companies" method="POST" className={classes.form}>
@@ -23,7 +29,7 @@ function NewCompanyForm({ onCancel }) {
                     <textarea id="businessOverview" name="businessOverview" rows="5" cols="140"></textarea>
                 </div>
                 <br/>
-                <button className={classes.btn} type="submit">SAVE</button>
+                <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
                 <button className={classes.btn} onClick={onCancel}>Cancel</button>
             </Form>
             

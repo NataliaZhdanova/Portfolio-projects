@@ -1,16 +1,13 @@
+// DotEnv Config
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Common Imports
 import { Company } from "../models/company.js";
 
 import knex from "knex";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+// Database Connection
 const db = knex({
     client: "pg",
     connection: {
@@ -23,16 +20,10 @@ const db = knex({
     pool: { min: 0, max: 5, idleTimeoutMillis: 10000, reapIntervalMillis: 1000 }
   });
 
-export function showCompaniesPage(req, res, next) {
-    // const csrfToken = req.csrfToken();
-    // res.cookie('XSRF-TOKEN', csrfToken);
-    // res.sendFile(path.join(__dirname, "..", "views", "companies.html"), { csrfToken });
-    res.sendFile(path.join(__dirname, "..", "views", "companies.html"));
-};
-
+// Get all companies - for /companies/all route
 export function getAllCompanies(req, res, next) {
     try {
-        let userid = req.session.user.userid;
+        let userid = req.params.userid;
         Company.fetchAll(userid).then(company => {
             res.send(company);
         });
@@ -40,31 +31,24 @@ export function getAllCompanies(req, res, next) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+}; 
 
-export function showNewCompanyPage(req, res, next) {
-    // const csrfToken = req.csrfToken();
-    // res.cookie('XSRF-TOKEN', csrfToken);
-    // res.sendFile(path.join(__dirname, "..", "views", "newCompany.html"), { csrfToken });
-    res.sendFile(path.join(__dirname, "..", "views", "newCompany.html"));
-}
-
+// Add a new company to the database
 export async function AddCompanyToDB(req, res) {
     try {
-        const { companyname, url, startup, businessoverview } = req.body;
-        const company = new Company(companyname, url, startup, businessoverview);
-        let userid = req.session.user.userid;
-        
+        const { companyname, url, businessoverview, userid } = req.body;
+        const company = new Company(companyname, url, businessoverview, userid);
+                
         if (!companyname || !url) {
             return res.status(400).json({ error: "Please provide the name of the company and the URL" });
         }
 
         const existingCompany = await db("company").where("companyname", companyname).where("userid", userid).first();
         if (existingCompany) {
-            return res.status(409).redirect("/").json({ error: "Company with this name already exists" });
+            return res.status(409).redirect("/");
         }
         
-        await company.save(userid);
+        await company.save();
         res.status(200).json({ message: "Company added successfully" });
 
     } catch (error) {

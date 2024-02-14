@@ -1,15 +1,11 @@
 import express from "express";
-import isAuth from "../middleware/isAuth.js";
-import { showCompaniesPage, getAllCompanies, showNewCompanyPage, AddCompanyToDB } from "../controllers/companies.js"
+import tokenAuth from "../middleware/tokenAuth.js";
+import { getAllCompanies, AddCompanyToDB } from "../controllers/companies.js"
 
 const companyRouter = express.Router();
+companyRouter.use(tokenAuth);
 
-companyRouter.get("/", isAuth, showCompaniesPage);
-
-companyRouter.get("/all", isAuth, getAllCompanies);
-
-companyRouter.get("/new", isAuth, showNewCompanyPage);
-
-companyRouter.post("/new", isAuth, AddCompanyToDB);
+companyRouter.get("/all/:userid", getAllCompanies);
+companyRouter.post("/new", AddCompanyToDB);
 
 export default companyRouter;

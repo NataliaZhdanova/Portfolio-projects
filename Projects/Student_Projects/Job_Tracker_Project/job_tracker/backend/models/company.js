@@ -15,20 +15,18 @@ const db = knex({
   });
 
 export class Company {
-    constructor(companyname, url, startup = false, businessoverview = null, userid = null) {
+    constructor(companyname, url, businessoverview = null, userid) {
         this.companyname = companyname;
         this.url = url;
-        this.startup = startup;
         this.businessoverview = businessoverview;
         this.userid = userid;
     }
     
-    save(userid) {
+    save() {
         return db("company").insert({
-            userid: userid,
+            userid: this.userid,
             companyname: this.companyname,
             url: this.url,
-            startup: this.startup,
             businessoverview: this.businessoverview
         })
     };

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Form, NavLink } from 'react-router-dom';
 
 import classes from './NavBar.module.css';
 
@@ -49,14 +49,13 @@ function NavBar() {
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/logout"
-              className={({ isActive }) =>
-                isActive ? classes.active : undefined
-              }
+            <Form
+              action="/logout"
+              method="post"
+              className={classes.logout}              
             >
-              Logout
-            </NavLink>
+              <button>Logout</button>
+            </Form>
           </li>
           
         </ul>

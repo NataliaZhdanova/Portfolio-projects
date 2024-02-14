@@ -1,50 +1,65 @@
+import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import AuthenticationPage, { action as authAction} from "./pages/Authentication.js";
+import AuthenticationPage, { action as authAction } from "./pages/Authentication.js";
 import DashboardPage from './pages/Dashboard.js';
-import CompaniesPage, { action as addCompanyAction} from './pages/Companies.js';
-import PositionsPage, { action as addPositionAction} from './pages/Positions.js';
-import ApplicationsPage, { action as addApplicationAction} from './pages/Applications.js';
+import CompaniesPage, { action as addCompanyAction } from './pages/Companies.js';
+import PositionsPage, { action as addPositionAction } from './pages/Positions.js';
+import ApplicationsPage, { action as addApplicationAction } from './pages/Applications.js';
+import { action as logout } from './pages/Logout.js';
+
+import { checkAuthLoader } from './utils/auth.js';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <AuthenticationPage />,
-    action: authAction
+    {
+      path: '/',
+      element: <AuthenticationPage />,
+      action: authAction
 
-  },
-  {
-    path: '/auth',
-    element: <AuthenticationPage />,
-    action: authAction
-  },
-  {
-    path: '/dashboard',
-    element: <DashboardPage />,
+    },
+    {
+      path: '/auth',
+      element: <AuthenticationPage />,
+      action: authAction
+    },
+    {
+      path: '/dashboard',
+      element: <DashboardPage />,
+      loader: checkAuthLoader,
+    },
+    {
+      path: '/companies',
+      element: <CompaniesPage />,
+      action: addCompanyAction,
+      loader: checkAuthLoader,
+      
+    },
+    {
+      path: '/positions',
+      element: <PositionsPage />,
+      action: addPositionAction,
+      loader: checkAuthLoader,
 
-  },
-  {
-    path: '/companies',
-    element: <CompaniesPage />,
-    action: addCompanyAction
+    },
+    {
+      path: '/applications',
+      element: <ApplicationsPage />,
+      action: addApplicationAction,
+      loader: checkAuthLoader,
 
-  },
-  {
-    path: '/positions',
-    element: <PositionsPage />,
-    action: addPositionAction
-
-  },
-  {
-    path: '/applications',
-    element: <ApplicationsPage />,
-    action: addApplicationAction
-
-  },
-]);
+    },
+    {
+      path: '/logout',
+      action: logout
+    },
+  ]);
+  
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider router={router} />
+  );
+
 }
 
 export default App;

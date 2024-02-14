@@ -13,8 +13,8 @@ import classes from "./AuthForm.module.css";
 function AuthForm() {
 
   return (
-      <div id="login-section">
-        
+      <div id="login-section">    
+
             <Form id="loginForm" action="/auth" method="POST" className={classes.form}>
             <h1>Already registered? Log in!</h1>
                 <div className="form-control">

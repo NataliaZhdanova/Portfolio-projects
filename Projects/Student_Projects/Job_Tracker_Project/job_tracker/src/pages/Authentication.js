@@ -7,21 +7,31 @@
 // /backend/models/user.js - user model keeps the CRUD DB logic
 // /backend/controllers/users.js - keeps the login/registration data processing logic and creates a session
 
+import { redirect, useActionData } from "react-router-dom";
+
 import AuthForm from "../components/AuthForm";
 import RegForm from "../components/RegForm";
-import { redirect } from "react-router-dom";
 import classes from "../components/AuthForm.module.css";
 
+// Authentication Page itself assembled from AuthForm and RegForm components
+
 function AuthenticationPage() {
+  const data = useActionData();
+
   return (
-    <main className="reglog">
-      <AuthForm />
-      <RegForm />
-    </main>
+    <div>
+      {data && <p>{data.error}{data.message}</p>}
+      <main className={classes.reglog}>
+        <AuthForm />
+        <RegForm />
+      </main>
+    </div>
   
 );}
 
 export default AuthenticationPage;
+
+// This function handles the login and registration data processing
 
 export async function action({request}) {
   const data = await request.formData();
@@ -30,23 +40,38 @@ export async function action({request}) {
   const signupUsername = data.get("signupUsername");
   const signupEmail = data.get("signupEmail");
   const signupPassword = data.get("signupPassword");
-  console.log(signupUsername);
 
   if (signupUsername === null) {
         const authData = {
           email: loginEmail,
-          password: loginPassword,
+          password: loginPassword,          
         };
-        console.log(authData);
-        const response = await fetch("http://localhost:9000/auth/login", {
-          method: "POST",
+        
+        const response = await fetch('http://localhost:9000/auth/login', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify(authData)
+          body: JSON.stringify(authData),
+          credentials: 'include'
         });
+        const data = await response.json();
 
-        return redirect("/positions");
+        const token = data.token;
+        const userId = data.userId;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
+
+        const expiration = new Date();
+        expiration.setHours(expiration.getHours() + 1);
+        localStorage.setItem('expiration', expiration.toISOString());
+        
+        if (response.status === 200) {
+            return redirect("/companies");
+        } else {
+          return data;
+        };
+        
   } else {
       const regData = {
         username: signupUsername,
@@ -54,14 +79,19 @@ export async function action({request}) {
         password: signupPassword,
       };
 
-      const response = await fetch("http://localhost:9000/auth/register", {
-        method: "POST",
+      const response = await fetch('http://localhost:9000/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(regData)
+        body: JSON.stringify(regData),
+        credentials: 'include'
       });
 
-      return redirect("/auth");
+      const data = await response.json()
+
+      return data;
+
   };
 }
+

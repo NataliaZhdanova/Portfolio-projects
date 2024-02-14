@@ -1,16 +1,17 @@
 import express from "express";
-import isAuth from "../middleware/isAuth.js";
+import cors from "cors";
 import { showPositionsPage, getAllPositions, showNewPositionPage, addPositionToDB } from "../controllers/positions.js"
 
 const positionsRouter = express.Router();
+positionsRouter.use(cors());
 
-positionsRouter.get("/", isAuth, showPositionsPage);
+positionsRouter.get("/", showPositionsPage);
 
-positionsRouter.get("/all", isAuth, getAllPositions);
+positionsRouter.get("/all", getAllPositions);
 
-positionsRouter.get("/new", isAuth, showNewPositionPage);
+positionsRouter.get("/new", showNewPositionPage);
 
-positionsRouter.post("/new", isAuth, addPositionToDB);
+positionsRouter.post("/new", addPositionToDB);
 
 // positionsRouter.get("/positions:userId:positionId", (req, res) => {
 //   const userId = req.params.userId;

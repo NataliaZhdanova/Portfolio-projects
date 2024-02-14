@@ -8,11 +8,9 @@
 // /backend/controllers/users.js - keeps the login/registration data processing logic and creates a session
 
 import express from "express";
-import { showAuthPage, regUser, loginUser } from "../controllers/users.js"
+import { regUser, loginUser } from "../controllers/users.js"
 
 const userRouter = express.Router();
-
-userRouter.get("/", showAuthPage);
 
 userRouter.post("/register", regUser);
 

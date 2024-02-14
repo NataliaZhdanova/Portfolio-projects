@@ -1,41 +1,46 @@
 import * as React from 'react';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import classes from "./AllCompanies.module.css";
 import NewCompanyForm from './NewCompanyCard';
+import { getAuthToken } from '../utils/auth.js';
+import { getUserId } from '../utils/userId.js';
 
 export default function AllCompanies() {
     const [companyData, setCompanyData] = useState([]);
     const [isAddingCompany, setIsAddingCompany] = useState(false);
-  
-    useEffect(() => {
-      // Fetch company data when the component mounts
-      fetchData();
-    }, []);
-  
+    const token = getAuthToken();
+    const userId = getUserId();
+    let url = 'http://localhost:9000/companies/all/' + userId
+
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:9000/companies/all'); 
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token, 
+          }
+        }); 
         const data = await response.json();
         setCompanyData(data);
-      } catch (error) {
+        return data
+       } catch (error) {
         console.error('Error fetching company data:', error);
       }
     };
+
+    const fetchDataRef = useRef(fetchData);
+
+    useEffect(() => {
+      fetchDataRef.current();
+    }, []);
 
     const handleAddCompanyClick = () => {
       setIsAddingCompany(true);
     };
   
-    const handleSaveNewCompany = async () => {
-      // Perform logic to save the new company data
-      // After saving, reload the entire page
-      setIsAddingCompany(false);
-      await fetchData(); // Fetch updated data
-      window.location.reload(); // Reload the entire page
-    };
-    
+ 
     return (
-      <div>
+      <div className={classes.companies}>
         <h1>Companies</h1>
         <table>
           <thead>
@@ -60,7 +65,7 @@ export default function AllCompanies() {
         <br></br>      
         <button className={classes.btn} type="button" id="addNewCompany" onClick={handleAddCompanyClick}>Add Company</button>
         {isAddingCompany && (
-        <NewCompanyForm onSave={handleSaveNewCompany} onCancel={() => setIsAddingCompany(false)} />
+        <NewCompanyForm onCancel={() => setIsAddingCompany(false)} />
         )}
       </div>
       </div>
