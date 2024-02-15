@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import classes from "./AllCompanies.module.css";
 import NewCompanyForm from './NewCompanyCard';
 import { getAuthToken } from '../utils/auth.js';
-import { getUserId } from '../utils/userId.js';
+import { fetchData } from '../utils/fetchData.js';
 
 export default function AllCompanies() {
     const [companyData, setCompanyData] = useState([]);
@@ -14,25 +14,19 @@ export default function AllCompanies() {
     const [editedBusinessOverview, setEditedBusinessOverview] = useState('');     
 
     const token = getAuthToken();
-    const userId = getUserId();
 
-// Fetch all companies from the database
-
-const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:9000/companies/all/' + userId, {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer " + token, 
-          }
-        }); 
-        const data = await response.json();
+// Fetch company data from the database
+    
+    const getCompanyData = () => {
+      fetchData()
+      .then(data => {
         setCompanyData(data);
-        return data
-       } catch (error) {
+      })
+      .catch(error => {
         console.error('Error fetching company data:', error);
-      }
-    };
+      });
+
+    }
 
 // Delete a company from the database
 
@@ -45,7 +39,7 @@ const fetchData = async () => {
           }
         });
         const data = await response.json();
-        fetchData();
+        getCompanyData();
         return data;
       } catch (error) {
         console.error('Error deleting company:', error);
@@ -69,7 +63,7 @@ const fetchData = async () => {
           })
         });
         const data = await response.json();
-        fetchData();
+        getCompanyData();
         return data;
       } catch (error) {
         console.error('Error updating company:', error);
@@ -78,7 +72,7 @@ const fetchData = async () => {
 
 // Use ref to store the function so that it can be called in useEffect
 
-    const fetchDataRef = useRef(fetchData);
+    const fetchDataRef = useRef(getCompanyData);
 
 // Call the function in useEffect
 
@@ -155,8 +149,7 @@ const fetchData = async () => {
           )}
         </div>
       </div>
-      
-      
+            
     );
   };
     

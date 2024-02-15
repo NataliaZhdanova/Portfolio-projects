@@ -45,10 +45,11 @@ export async function AddCompanyToDB(req, res) {
 
         const existingCompany = await db("company").where("companyname", companyname).where("userid", userid).first();
         if (existingCompany) {
-            return res.status(409).redirect("/");
+            return res.status(409).json({ error: "Company with this name already exists" });
         }
         
         await company.save();
+
         res.status(200).json({ message: "Company added successfully" });
 
     } catch (error) {

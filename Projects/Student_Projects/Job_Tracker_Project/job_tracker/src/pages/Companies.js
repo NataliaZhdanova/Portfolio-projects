@@ -1,5 +1,5 @@
 import React from 'react';
-import { redirect, useSubmit } from "react-router-dom";
+import { useSubmit } from "react-router-dom";
 import { useEffect } from "react";
 
 import AllCompanies from "../components/AllCompanies";
@@ -28,15 +28,13 @@ function CompaniesPage() {
     }, tokenDuration);
   }, [token, submit]);
 
- return (
+  return (
     <div>
         <NavBar />
         <main>
         <AllCompanies />
         </main>
-    </div>
-    
-  
+    </div>  
 );}
 
 export default CompaniesPage;
@@ -62,11 +60,11 @@ export async function action({request}) {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + token, 
     },
-    body: JSON.stringify(companyData)
+    body: JSON.stringify(companyData),
   });
 
   if (response.status === 200) {
-    // window.location.reload();
-    return redirect("/companies");
+    window.location.reload();
+    return null;
   };
 }

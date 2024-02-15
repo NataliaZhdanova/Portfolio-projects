@@ -34,20 +34,19 @@ export function getAllPositions(req, res, next) {
 
   export async function AddPositionToDB(req, res) {
     try {
-        const { companyid, title, url, requirements, keywords, discoverydate } = req.body;
-        const position = new Position(url, title, requirements, keywords, discoverydate, companyid); 
-        let userid = req.params.userid;    
-  
+        const { title, url, requirements, keywords, discoverydate, companyid, userid } = req.body;
+        const position = new Position(title, url, requirements, keywords, discoverydate, companyid, userid); 
+ 
         if (!title || !url || !discoverydate) {
             return res.status(400).json({ error: "Please provide the name, URL and discovery date of a position" });
         }
   
         const existingPosition = await db("position").where("url", url).where("userid", userid).first();
         if (existingPosition) {
-            return res.status(409).redirect("/").json({ error: "Position with this URL already exists" });
+            return res.status(409).json({ error: "Position with this URL already exists" });
         }
   
-        await position.save(userid);
+        await position.save();
   
         res.status(200).json({ message: "Position added successfully" });
     } catch (error) {

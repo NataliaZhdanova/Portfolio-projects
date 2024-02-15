@@ -2,7 +2,7 @@ import { Form, useSubmit } from 'react-router-dom';
 import classes from "./NewCompanyForm.module.css";
 
 function NewCompanyForm({ onCancel }) {
-    
+
     const submit = useSubmit();
     
     const handleSubmit = (e) => {

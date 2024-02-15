@@ -1,5 +1,5 @@
 import React from 'react';
-import { redirect, useSubmit } from "react-router-dom";
+import { useSubmit } from "react-router-dom";
 import { useEffect } from "react";
 
 import AllPositions from "../components/AllPositions";
@@ -52,12 +52,13 @@ export async function action({request}) {
   const userId = getUserId();
 
   const positionData = {
-          companyid: companyId,
           title: positionTitle,
           url: positionURL,
           requirements: requirements,
           keywords: keywords,
           discoverydate: discoveryDate,
+          companyid: companyId,
+          userid: userId,
         };
 
   const response = await fetch("http://localhost:9000/positions/new", {
@@ -70,7 +71,8 @@ export async function action({request}) {
   });
 
   if (response.status === 200) {
-    return redirect("/positions");
+    window.location.reload();
+    return null;
   };
 };
 

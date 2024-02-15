@@ -33,9 +33,9 @@ function NewPositionForm({ onCancel }) {
 
   // Call the function in useEffect
   
-      useEffect(() => {
-        fetchDataRef.current();
-      }, []);
+  useEffect(() => {
+    fetchDataRef.current();
+  }, []);
 
   const submit = useSubmit();
     const handleSubmit = (e) => {
@@ -54,7 +54,7 @@ return (
                     <label htmlFor="companyName">Select Company:</label><br/>
                     <select id="companyName" name="companyName" required>
                         {companyData.map((company) => (
-                            <option key={company.companyid} value={company.companyid}>{company.name}</option>
+                            <option key={company.companyid} value={company.companyid}>{company.companyname}</option>
                         ))}
                     </select>
                 </div>

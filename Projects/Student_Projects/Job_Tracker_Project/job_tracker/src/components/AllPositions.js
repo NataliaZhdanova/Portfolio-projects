@@ -63,7 +63,6 @@ export default function AllPositions() {
             "Authorization": "Bearer " + token, 
           },
           body: JSON.stringify({
-            companyid: editedCompanyName,
             title: editedTitle,
             url: editedUrl,
             requirements: editedRequirements,
@@ -96,7 +95,6 @@ const fetchDataRef = useRef(fetchData);
 
     const handleEditClick = (position) => {
       setEditingPosition(position);
-      setEditedCompanyName(position.companyname);
       setEditedTitle(position.title);
       setEditedUrl(position.url);
       setEditedRequirements(position.requirements);
@@ -133,11 +131,11 @@ const fetchDataRef = useRef(fetchData);
           <tbody>
             {positionData.map((position) => (
               <tr key={position.positionid}>
-                <td>{editingPosition === position ? <input type="text" value={editedCompanyName} onChange={(e) => setEditedCompanyName(e.target.value)} /> : position.companyname}</td>
+                <td>{position.companyname}</td>
                 <td>{editingPosition === position ? <input type="text" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} /> : position.title}</td>
                 <td>{editingPosition === position ? <input type="text" value={editedUrl} onChange={(e) => setEditedUrl(e.target.value)} /> : position.url}</td>
-                <td>{editingPosition === position ? <input type="text" value={editedRequirements} onChange={(e) => setEditedRequirements(e.target.value)} /> : position.requirements}</td>
-                <td>{editingPosition === position ? <input type="text" value={editedKeywords} onChange={(e) => setEditedKeywords(e.target.value)} /> : position.keywords}</td>
+                <td>{editingPosition === position ? <textarea rows="10" cols="50" value={editedRequirements} onChange={(e) => setEditedRequirements(e.target.value)} /> : position.requirements}</td>
+                <td>{editingPosition === position ? <textarea rows="10" cols="50" value={editedKeywords} onChange={(e) => setEditedKeywords(e.target.value)} /> : position.keywords}</td>
                 <td>{position.discoverydate}</td>
                 <td>
                   {editingPosition === position ? (
