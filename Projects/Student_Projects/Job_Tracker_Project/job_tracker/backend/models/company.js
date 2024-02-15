@@ -31,8 +31,21 @@ export class Company {
         })
     };
 
+    static delete(companyid) {
+        return db("company").where("companyid", companyid).delete();
+    };
+
+    static update(companyid, companyname, url, businessoverview) {
+        return db("company").where("companyid", companyid).update({
+            companyname: companyname,
+            url: url,
+            businessoverview: businessoverview
+        })
+    };
+
     static fetchAll(userid) {
         return db
         .select("*").from("company").where("userid", userid)
     };
+    
 }

@@ -2,13 +2,16 @@ import { Form, useSubmit } from 'react-router-dom';
 import classes from "./NewCompanyForm.module.css";
 
 function NewCompanyForm({ onCancel }) {
+    
     const submit = useSubmit();
+    
     const handleSubmit = (e) => {
     e.preventDefault();
  
     submit(e.currentTarget.form);
-    e.currentTarget.form.reset();
-  };
+    e.currentTarget.form.reset(); 
+    };
+
     return (
       <div className={classes.addnewform}>
         <h1>Add new Company</h1>

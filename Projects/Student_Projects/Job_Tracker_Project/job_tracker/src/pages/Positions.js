@@ -1,9 +1,32 @@
 import React from 'react';
+import { redirect, useSubmit } from "react-router-dom";
+import { useEffect } from "react";
+
 import AllPositions from "../components/AllPositions";
 import NavBar from "../components/NavBar";
-import { redirect } from "react-router-dom";
+import { getAuthToken, getTokenDuration } from '../utils/auth';
+import { getUserId } from '../utils/userId';
 
 function PositionsPage() {
+  const token = getAuthToken();
+  const submit = useSubmit();
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    if (token === "EXPIRED") {
+      submit(null, { action: "/logout", method: "post"});
+      return;
+    }
+
+    const tokenDuration = getTokenDuration();
+
+    setTimeout(() => {
+      submit(null, { action: "/logout", method: "post"});
+    }, tokenDuration);
+  }, [token, submit]);
   
  return (
     <div>
@@ -19,13 +42,14 @@ export default PositionsPage;
 
 export async function action({request}) {
   const data = await request.formData();
-  console.log(data);
   const companyId = data.get("companyName");
   const positionTitle = data.get("positionTitle");
   const positionURL = data.get("positionURL");
   const requirements = data.get("requirements");
   const keywords = data.get("keywords");
   const discoveryDate = data.get("discoveryDate");
+  const token = getAuthToken();
+  const userId = getUserId();
 
   const positionData = {
           companyid: companyId,
@@ -39,11 +63,15 @@ export async function action({request}) {
   const response = await fetch("http://localhost:9000/positions/new", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token,
     },
     body: JSON.stringify(positionData)
   });
-  return redirect("/positions");
+
+  if (response.status === 200) {
+    return redirect("/positions");
+  };
 };
 
 

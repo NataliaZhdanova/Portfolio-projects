@@ -15,7 +15,7 @@ const db = knex({
   });
 
 export class Position {
-    constructor(url, title, requirements = null, keywords = null, discoverydate, companyid, userid = null) {
+    constructor(url, title, requirements = null, keywords = null, discoverydate, companyid, userid) {
         this.userid = userid;
         this.companyid = companyid;
         this.title = title;
@@ -26,7 +26,7 @@ export class Position {
         
     }
 
-    save(userid) {
+    save() {
         return db("position").insert({
             url: this.url, 
             title: this.title,
@@ -34,7 +34,20 @@ export class Position {
             keywords: this.keywords,
             discoverydate: this.discoverydate,
             companyid: this.companyid,
-            userid: userid, 
+            userid: this.userid, 
+        })
+    };
+
+    static delete(positionid) {
+        return db("position").where("positionid", positionid).delete();
+    };
+
+    static update(positionid, title, url, requirements, keywords) {
+        return db("position").where("positionid", positionid).update({
+            title: title,
+            url: url,
+            requirements: requirements,
+            keywords: keywords
         })
     };
 

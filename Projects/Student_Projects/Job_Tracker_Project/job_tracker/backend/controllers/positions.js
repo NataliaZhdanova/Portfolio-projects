@@ -4,12 +4,6 @@ dotenv.config();
 import { Position } from "../models/position.js";
 
 import knex from "knex";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const db = knex({
   client: "pg",
@@ -23,31 +17,26 @@ const db = knex({
   pool: { min: 0, max: 5, idleTimeoutMillis: 10000, reapIntervalMillis: 1000 }
 });
 
-export function showPositionsPage(req, res, next) {
-    res.sendFile(path.join(__dirname, "..", "views", "positions.html"));
-};
+// Get all positions - for /positions/all route
+export function getAllPositions(req, res, next) {
+  try {
+      let userid = req.params.userid;
+      Position.fetchAll(userid).then(position => {
+          res.send(position);
+      });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}; 
 
-export function getAllPositions(req, res, next) { 
-    try {
-      let userid = req.session.user.userid;
-      Position.fetchAll(userid).then(position => res.send(position));
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
+// Add a new position to the database
 
-
-  export function showNewPositionPage(req, res, next) {
-    res.sendFile(path.join(__dirname, "..", "views", "newPosition.html"));
-  };
-
-  export async function addPositionToDB(req, res) {
+  export async function AddPositionToDB(req, res) {
     try {
         const { companyid, title, url, requirements, keywords, discoverydate } = req.body;
-        const position = new Position(url, title, requirements, keywords, discoverydate, companyid);
-        let userid = req.session.user.userid;
-      
+        const position = new Position(url, title, requirements, keywords, discoverydate, companyid); 
+        let userid = req.params.userid;    
   
         if (!title || !url || !discoverydate) {
             return res.status(400).json({ error: "Please provide the name, URL and discovery date of a position" });
@@ -66,3 +55,32 @@ export function getAllPositions(req, res, next) {
         res.status(500).json({ error: "Internal Server Error" });
     }
   };
+
+// Delete a position from the database
+
+export function RemovePositionFromDB(req, res, next) {
+  try {
+      let positionid = req.params.positionid;
+      Position.delete(positionid).then(() => {
+          res.status(200).json({ message: "Position deleted successfully" });
+      });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+// Update a position in the database
+
+export function UpdatePositionInDB(req, res, next) {
+  try {
+      let positionid = req.params.positionid;
+      let { title, url, requirements, keywords } = req.body;
+      Position.update(positionid, title, url, requirements, keywords).then(() => {
+          res.status(200).json({ message: "Position updated successfully" });
+      });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}

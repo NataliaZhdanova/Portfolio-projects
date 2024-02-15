@@ -66,9 +66,7 @@ export async function action({request}) {
   });
 
   if (response.status === 200) {
+    // window.location.reload();
     return redirect("/companies");
   };
-};
-
-
-
+}

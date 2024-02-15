@@ -56,3 +56,32 @@ export async function AddCompanyToDB(req, res) {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+// Delete a company from the database
+
+export function RemoveCompanyFromDB(req, res, next) {
+    try {
+        let companyid = req.params.companyid;
+        Company.delete(companyid).then(() => {
+            res.status(200).json({ message: "Company deleted successfully" });
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+// Update a company in the database
+
+export function UpdateCompanyInDB(req, res, next) {
+    try {
+        let companyid = req.params.companyid;
+        let { companyname, url, businessoverview } = req.body;
+        Company.update(companyid, companyname, url, businessoverview).then(() => {
+            res.status(200).json({ message: "Company updated successfully" });
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
