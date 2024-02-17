@@ -31,6 +31,15 @@ export class Company {
         })
     };
 
+    fetch() {
+        return db
+        .select("*").from("company").where("companyname", this.companyname).where("url", this.url).where("userid", this.userid).first();
+    };
+
+    isExisting() {
+        return db("company").where("companyname", this.companyname).where("url", this.url).where("userid", this.userid).first();
+    };
+
     static delete(companyid) {
         return db("company").where("companyid", companyid).delete();
     };
@@ -43,9 +52,14 @@ export class Company {
         })
     };
 
+    static fetchById(companyid) {
+        return db
+        .select("*").from("company").where("companyid", companyid);
+    };
+
     static fetchAll(userid) {
         return db
-        .select("*").from("company").where("userid", userid)
+        .select("*").from("company").where("userid", userid);
     };
     
 }

@@ -1,32 +1,51 @@
 import * as React from 'react';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+
 import classes from "./AllCompanies.module.css";
 import NewCompanyForm from './NewCompanyCard';
+
 import { getAuthToken } from '../utils/auth.js';
-import { fetchData } from '../utils/fetchData.js';
+import { getUserId } from '../utils/userId.js';
 
 export default function AllCompanies() {
     const [companyData, setCompanyData] = useState([]);
     const [isAddingCompany, setIsAddingCompany] = useState(false);
+
     const [editingCompany, setEditingCompany] = useState(null);
     const [editedCompanyName, setEditedCompanyName] = useState('');
     const [editedUrl, setEditedUrl] = useState('');
     const [editedBusinessOverview, setEditedBusinessOverview] = useState('');     
 
     const token = getAuthToken();
+    const userId = getUserId();
 
 // Fetch company data from the database
     
-    const getCompanyData = () => {
-      fetchData()
-      .then(data => {
-        setCompanyData(data);
-      })
-      .catch(error => {
-        console.error('Error fetching company data:', error);
-      });
-
+    const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:9000/companies/all/' + userId, {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token, 
+        }
+      }); 
+      const data = await response.json();
+      setCompanyData(data);
+      return data
+     } catch (error) {
+      console.error('Error fetching company data:', error);
     }
+  };
+
+// Use ref to store the function so that it can be called in useEffect
+
+    const fetchDataRef = useRef(fetchData);
+
+// Call the function in useEffect
+
+    useEffect(() => {
+      fetchDataRef.current();
+    }, []);
 
 // Delete a company from the database
 
@@ -39,7 +58,7 @@ export default function AllCompanies() {
           }
         });
         const data = await response.json();
-        getCompanyData();
+        setCompanyData(companyData.filter(company => company.companyid !== companyid));
         return data;
       } catch (error) {
         console.error('Error deleting company:', error);
@@ -63,22 +82,65 @@ export default function AllCompanies() {
           })
         });
         const data = await response.json();
-        getCompanyData();
+        setCompanyData(companyData.map(company => {
+          if (company.companyid === companyid) {
+            return {
+              ...company,
+              companyname: editedCompanyName,
+              url: editedUrl,
+              businessoverview: editedBusinessOverview
+            };
+          }
+          return company;
+        }));
         return data;
       } catch (error) {
         console.error('Error updating company:', error);
       }
-    };           
+    };
 
-// Use ref to store the function so that it can be called in useEffect
+// Add a new company to the database
 
-    const fetchDataRef = useRef(getCompanyData);
+    const addCompany = async (addCompanyData) => {
+      try {
+        const response = await fetch('http://localhost:9000/companies/new', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token, 
+          },
+          body: JSON.stringify(addCompanyData)
+        });
+        const data = await response.json();
+        console.log(data.savedCompany);
+        if (response.status === 201) {
+        setCompanyData([...companyData, data.savedCompany]);
+        setIsAddingCompany(false);
+        }
+        return data;
+      } catch (error) {
+        console.error('Error adding company:', error);
+      }
+    };
 
-// Call the function in useEffect
 
-    useEffect(() => {
-      fetchDataRef.current();
-    }, []);
+    // const addCompany = useCallback(async (companyData) => {
+    //   try {
+    //     const response = await fetch('http://localhost:9000/companies/new', {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         "Authorization": "Bearer " + token, 
+    //       },
+    //       body: JSON.stringify(companyData)
+    //     });
+    //     const data = await response.json();
+    //     setCompanyData([...companyData, data]);
+    //     return data;
+    //   } catch (error) {
+    //     console.error('Error adding company:', error);
+    //   }
+    // }, [companyData]);
 
 // Handlers for adding, editing, and deleting companies
 
@@ -145,7 +207,7 @@ export default function AllCompanies() {
           <br></br>      
           <button className={classes.btn} type="button" id="addNewCompany" onClick={handleAddCompanyClick}>Add Company</button>
           {isAddingCompany && (
-          <NewCompanyForm onCancel={() => setIsAddingCompany(false)} />
+          <NewCompanyForm callback={addCompany} onCancel={() => setIsAddingCompany(false)} />
           )}
         </div>
       </div>

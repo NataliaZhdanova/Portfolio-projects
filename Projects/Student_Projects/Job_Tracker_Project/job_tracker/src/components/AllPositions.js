@@ -9,7 +9,6 @@ export default function AllPositions() {
     const [positionData, setPositionData] = useState([]);
     const [isAddingPosition, setIsAddingPosition] = useState(false);
     const [editingPosition, setEditingPosition] = useState(null);
-    const [editedCompanyName, setEditedCompanyName] = useState('');
     const [editedTitle, setEditedTitle] = useState('');
     const [editedUrl, setEditedUrl] = useState('');
     const [editedRequirements, setEditedRequirements] = useState('');
@@ -71,7 +70,7 @@ export default function AllPositions() {
         });
         const data = await response.json();
         fetchData();
-        return data;
+        return data; 
       } catch (error) {
         console.error('Error updating position:', error);
       }

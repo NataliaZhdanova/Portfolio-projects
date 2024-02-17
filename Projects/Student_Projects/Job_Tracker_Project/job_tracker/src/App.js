@@ -3,7 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import AuthenticationPage, { action as authAction } from "./pages/Authentication.js";
 import DashboardPage from './pages/Dashboard.js';
-import CompaniesPage, { action as addCompanyAction } from './pages/Companies.js';
+import CompaniesPage from './pages/CompaniesPage.js';
 import PositionsPage, { action as addPositionAction } from './pages/Positions.js';
 import ApplicationsPage, { action as addApplicationAction } from './pages/Applications.js';
 import { action as logout } from './pages/Logout.js';
@@ -30,7 +30,6 @@ const router = createBrowserRouter([
     {
       path: '/companies',
       element: <CompaniesPage />,
-      action: addCompanyAction,
       loader: checkAuthLoader,
       
     },

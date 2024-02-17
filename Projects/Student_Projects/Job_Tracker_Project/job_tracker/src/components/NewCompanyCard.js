@@ -1,21 +1,34 @@
 import { Form, useSubmit } from 'react-router-dom';
 import classes from "./NewCompanyForm.module.css";
+import { getUserId } from '../utils/userId';
 
-function NewCompanyForm({ onCancel }) {
+function NewCompanyForm({ callback, onCancel }) {
+
+    const userId = getUserId();
 
     const submit = useSubmit();
     
     const handleSubmit = (e) => {
     e.preventDefault();
+
+    const addCompanyData = {
+        companyname: e.currentTarget.form.companyName.value,
+        url: e.currentTarget.form.companyURL.value,
+        businessoverview: e.currentTarget.form.businessOverview.value,
+        userid: userId,
+    };
+
+    callback(addCompanyData);
  
     submit(e.currentTarget.form);
     e.currentTarget.form.reset(); 
+        
     };
 
     return (
       <div className={classes.addnewform}>
         <h1>Add new Company</h1>
-            <Form id="newCompanyForm"  action="/companies" method="POST" className={classes.form}>
+            <Form id="newCompanyForm" className={classes.form}>
             
                 <div className="form-control">
                     <label htmlFor="companyName">Company Name:</label><br/>
