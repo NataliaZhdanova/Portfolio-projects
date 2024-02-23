@@ -30,25 +30,54 @@ export function getAllPositions(req, res, next) {
   }
 }; 
 
+export async function GetPositionById(req, res, next) {
+  try {
+      let positionid = req.params.positionid;
+
+      const position = await Position.fetchById(positionid);
+
+      res.status(200).json(position);
+
+  } catch (error) {
+      console.error("Error fetching position:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export function GetPositionsForCompany(req, res, next) {
+  try {
+      let companyid = req.params.companyid;
+      Position.fetchAllForCompany(companyid).then(position => {
+          res.send(position);
+      });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Add a new position to the database
 
-  export async function AddPositionToDB(req, res) {
+  export async function AddPositionToDB(req, res, next) {
     try {
-        const { title, url, requirements, keywords, discoverydate, companyid, userid } = req.body;
-        const position = new Position(title, url, requirements, keywords, discoverydate, companyid, userid); 
+        const { url, title, requirements, keywords, discoverydate, companyid, userid } = req.body;
+        const position = new Position(url, title, requirements, keywords, discoverydate, companyid, userid); 
  
         if (!title || !url || !discoverydate) {
             return res.status(400).json({ error: "Please provide the name, URL and discovery date of a position" });
         }
   
-        const existingPosition = await db("position").where("url", url).where("userid", userid).first();
+        const existingPosition = await position.isExisting();
         if (existingPosition) {
-            return res.status(409).json({ error: "Position with this URL already exists" });
+            return res.status(409).json({ error: "Position with this URL for this company already exists" });
         }
   
         await position.save();
+
+        const savedPosition = await position.fetch();
   
-        res.status(200).json({ message: "Position added successfully" });
+        res.status(201).json({savedPosition, message: "Position added successfully" });
+
     } catch (error) {
         console.error("Error adding position:", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -57,29 +86,37 @@ export function getAllPositions(req, res, next) {
 
 // Delete a position from the database
 
-export function RemovePositionFromDB(req, res, next) {
+export async function RemovePositionFromDB(req, res, next) {
   try {
       let positionid = req.params.positionid;
-      Position.delete(positionid).then(() => {
-          res.status(200).json({ message: "Position deleted successfully" });
-      });
-  } catch (err) {
-      console.error(err);
+
+      const deletedPosition = await Position.fetchById(positionid);
+
+      await Position.delete(positionid);
+
+      res.status(200).json({deletedPosition, message: "Position deleted successfully" });
+
+  } catch (error) {
+      console.error("Error deleting position:", error);
       res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
-// Update a position in the database
+// Update a position in the database - for /positions/update/:positionid route
 
-export function UpdatePositionInDB(req, res, next) {
+export async function UpdatePositionInDB(req, res, next) {
   try {
       let positionid = req.params.positionid;
       let { title, url, requirements, keywords } = req.body;
-      Position.update(positionid, title, url, requirements, keywords).then(() => {
-          res.status(200).json({ message: "Position updated successfully" });
-      });
-  } catch (err) {
-      console.error(err);
+
+      await Position.update(positionid, title, url, requirements, keywords);
+
+      const updatedPosition = await Position.fetchById(positionid);
+
+      res.status(200).json({updatedPosition, message: "Position updated successfully" });
+
+  } catch (error) {
+    console.error("Error updating position:", error);
       res.status(500).json({ error: 'Internal Server Error' });
   }
 }

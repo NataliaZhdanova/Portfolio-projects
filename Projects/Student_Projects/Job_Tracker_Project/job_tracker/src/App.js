@@ -4,8 +4,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import AuthenticationPage, { action as authAction } from "./pages/Authentication.js";
 import DashboardPage from './pages/Dashboard.js';
 import CompaniesPage from './pages/CompaniesPage.js';
-import PositionsPage, { action as addPositionAction } from './pages/Positions.js';
-import ApplicationsPage, { action as addApplicationAction } from './pages/Applications.js';
+import PositionsPage from './pages/Positions.js';
+import CompanyPage from './pages/CompanyPage.js';
 import { action as logout } from './pages/Logout.js';
 
 import { checkAuthLoader } from './utils/auth.js';
@@ -34,19 +34,22 @@ const router = createBrowserRouter([
       
     },
     {
-      path: '/positions',
-      element: <PositionsPage />,
-      action: addPositionAction,
+      path: '/companies/:companyId',
+      element: <CompanyPage />,
       loader: checkAuthLoader,
-
     },
     {
-      path: '/applications',
-      element: <ApplicationsPage />,
-      action: addApplicationAction,
+      path: '/positions',
+      element: <PositionsPage />,
       loader: checkAuthLoader,
 
     },
+    // {
+    //   path: '/applications',
+    //   element: <ApplicationsPage />,
+    //   loader: checkAuthLoader,
+
+    // },
     {
       path: '/logout',
       action: logout

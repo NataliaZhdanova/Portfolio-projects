@@ -51,8 +51,40 @@ export class Position {
         })
     };
 
+    fetch() {
+        return db
+        .select("*").from("position").where("companyid", this.companyid).where("url", this.url).first();
+    };
+
+    isExisting() {
+        return db("position").where("companyid", this.companyid).where("url", this.url).first();
+    };
+
+    static delete(positionid) {
+        return db("position").where("positionid", positionid).delete();
+    };
+
+    static update(positionid, title, url, requirements, keywords) {
+        return db("position").where("positionid", positionid).update({
+            title: title,
+            url: url,
+            requirements: requirements,
+            keywords: keywords
+        })
+    };
+
+    static fetchById(positionid) {
+        return db
+        .select("*").from("position").where("positionid", positionid);
+    };
+
     static fetchAll(userid) {
         return db
         .select("position.*", "company.companyname").from("position").join("company", "position.companyid", "company.companyid").where("position.userid", userid);
+    };
+
+    static fetchAllForCompany(companyid) {
+        return db
+        .select("*").from("position").where("companyid", companyid);
     };
 }

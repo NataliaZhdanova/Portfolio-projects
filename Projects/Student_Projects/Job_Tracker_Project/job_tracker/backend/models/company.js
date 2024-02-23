@@ -62,4 +62,4 @@ export class Company {
         .select("*").from("company").where("userid", userid);
     };
     
-}
+} 

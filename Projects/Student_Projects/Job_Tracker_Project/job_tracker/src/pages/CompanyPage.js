@@ -2,10 +2,9 @@ import React from 'react';
 import { useSubmit } from "react-router-dom";
 import { useEffect } from "react";
 
-import Company from "../components/CompanyCard";
+import CompanyCard from "../components/CompanyCard";
 import NavBar from "../components/NavBar";
 import { getAuthToken, getTokenDuration } from '../utils/auth';
-import { getUserId } from '../utils/userId';
 
 function CompanyPage() {
   const token = getAuthToken();
@@ -32,7 +31,7 @@ function CompanyPage() {
     <div>
         <NavBar />
         <main>
-        <Company />
+        <CompanyCard />
         </main>
     </div>  
 );}

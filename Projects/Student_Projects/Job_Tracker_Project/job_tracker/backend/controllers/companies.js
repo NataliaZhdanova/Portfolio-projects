@@ -15,7 +15,21 @@ export async function getAllCompanies(req, res, next) {
         console.error("Error fetching companies:", error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-}; 
+};  
+
+export async function GetCompanyById(req, res, next) {
+    try {
+        let companyid = req.params.companyid;
+
+        const company = await Company.fetchById(companyid);
+
+        res.status(200).json(company);
+
+    } catch (error) {
+        console.error("Error fetching company:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 // Add a new company to the database - for /companies/new route
 
@@ -80,4 +94,4 @@ export async function UpdateCompanyInDB(req, res, next) {
         console.error("Error updating company:", error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-}
+} 
