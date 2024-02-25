@@ -6,7 +6,7 @@ const positionsRouter = express.Router();
 positionsRouter.use(tokenAuth);
 
 positionsRouter.get("/all/:userid", getAllPositions);
-positionsRouter.get("/all/:companyid", GetPositionsForCompany);
+positionsRouter.get("/:companyid", GetPositionsForCompany);
 positionsRouter.post("/new", AddPositionToDB);
 positionsRouter.get("/:positionid", GetPositionById);
 positionsRouter.delete("/delete/:positionid", RemovePositionFromDB);

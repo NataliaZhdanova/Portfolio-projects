@@ -9,12 +9,13 @@ const columns = [
   { field: 'discoverydate', headerName: 'Discovery Date', width: 90, sortable: true },
   ];
 
-export default function PositionsTable(data) {
+export default function PositionsTable({ data }) {
   const rows = data;
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        getRowId={(row) => row.positionid}
+        rows={ rows}
         columns={columns}
         initialState={{
           pagination: {

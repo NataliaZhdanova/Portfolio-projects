@@ -1,3 +1,10 @@
+// CompaniesPage -> is extended by -> NewCompanyCard
+// CompaniesPage -> CompanyPage -> includes -> CompanyCard
+// CompanyCard -> includes -> PositionsTable
+// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
+// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
 import { Form, useSubmit } from 'react-router-dom';
 import classes from "./NewCompanyForm.module.css";
 import { getUserId } from '../utils/userId';

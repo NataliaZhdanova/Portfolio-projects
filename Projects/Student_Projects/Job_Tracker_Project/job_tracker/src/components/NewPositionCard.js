@@ -1,3 +1,8 @@
+// PositionsPage -> is extended by -> NewPositionCard
+// PositionsPage -> PositionPage -> includes -> PositionCard
+// PositionCard -> includes -> ApplicationsTable
+// PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
 import { useState, useEffect, useRef } from "react";
 import { Form, useSubmit } from 'react-router-dom'
 import classes from "./NewPositionForm.module.css";
@@ -48,7 +53,7 @@ function NewPositionForm({ onCancel }) {
 return (
       <div className={classes.addnewform}>
         <h1>Add new Position</h1>
-            <Form id="newPositionForm"  action="/positions" method="POST" className={classes.form}>
+            <Form id="newPositionForm" className={classes.form}>
             
                 <div className="form-control">
                     <label htmlFor="companyName">Select Company:</label><br/>

@@ -5,18 +5,20 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 import classes from "./CompanyCard.module.css";
 import { getAuthToken } from '../utils/auth.js';
 import ModalAddPosition from './ModalAddPosition.js';
+import ModalAddApplication from './ModalAddApplication.js';
 import PositionsTable from './PositionsTable.js';
-// import ApplicationsTable from './ApplicationsTable.js';
+import ApplicationsTable from './ApplicationsTable.js';
 
 export default function CompanyCard() {
   const [companyData, setCompanyData] = useState([]);
-  const [positionsData, setPositionsData] = useState([]);
-  // const [applicationsData, setApplicationsData] = useState([]);
+  const [positionData, setPositionData] = useState([]);
+  const [applicationData, setApplicationData] = useState([]);
   const [isEdited, setIsEdited] = useState(false); 
   const [editedCompanyName, setEditedCompanyName] = useState('');
   const [editedUrl, setEditedUrl] = useState('');
   const [editedBusinessOverview, setEditedBusinessOverview] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalPositionOpen, setIsModalPositionOpen] = useState(false);
+  const [isModalApplicationOpen, setIsModalApplicationOpen] = useState(false);
   const token = getAuthToken();
       
   const fetchData = async () => {
@@ -31,63 +33,56 @@ export default function CompanyCard() {
       const data = await response.json();
       setCompanyData(data[0]);
       return data
+
     } catch (error) {
       console.error('Error fetching company data:', error);
     }
   };
 
-  const fetchDataRef = useRef(fetchData);    
-
-  useEffect(() => {
-    fetchDataRef.current();
-  }, []);
-
   const fetchPositions = async () => {
     try {
       const companyId = window.location.pathname.split("/").pop();
-      const response = await fetch('http://localhost:9000/positions/all/' + companyId, {
+      const response = await fetch('http://localhost:9000/positions/' + companyId, {
         method: "GET",
         headers: {
           "Authorization": "Bearer " + token, 
         }
       }); 
       const data = await response.json();
-      setPositionsData(data);
+      setPositionData(data);
       return data
     } catch (error) {
       console.error('Error fetching position data:', error);
     }
   };  
+
+  const fetchApplications = async () => {
+    try {
+      const companyId = window.location.pathname.split("/").pop();
+      const response = await fetch('http://localhost:9000/applications/' + companyId, {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token, 
+        }
+      }); 
+      const data = await response.json();
+      setApplicationData(data);
+      return data
+    } catch (error) {
+      console.error('Error fetching application data:', error);
+    }
+  };
   
+  const fetchDataRef = useRef(fetchData);
   const fetchPositionsRef = useRef(fetchPositions);
+  const fetchApplicationsRef = useRef(fetchApplications);   
 
   useEffect(() => {
+    fetchDataRef.current();
     fetchPositionsRef.current();
+    fetchApplicationsRef.current();
   }, []);
-
-//   const fetchApplications = async () => {
-//     try {
-//       const companyId = window.location.pathname.split("/").pop();
-//       const response = await fetch('http://localhost:9000/applications/all/' + companyId, {
-//         method: "GET",
-//         headers: {
-//           "Authorization": "Bearer " + token, 
-//         }
-//       }); 
-//       const data = await response.json();
-//       setApplicationsData(data);
-//       return data
-//      } catch (error) {
-//       console.error('Error fetching position data:', error);
-//     }
-//   };  
-
-// const fetchApplicationsRef = useRef(fetchApplications);
-
-// useEffect(() => {
-//   fetchApplicationsRef.current();
-// }, []);
-
+ 
   const updateCompany = async (companyid) => {
     try {
       
@@ -123,8 +118,29 @@ export default function CompanyCard() {
       });
       const data = await response.json();
       if (response.status === 201) {
-      setPositionsData([...positionsData, data.savedPosition]);
-      setIsModalOpen(false);
+      setPositionData([...positionData, data.savedPosition]);
+      setIsModalPositionOpen(false);
+      }
+      return data;
+    } catch (error) {
+      console.error('Error adding company:', error);
+    }
+  };
+
+  const addApplication = async (addApplicationData) => {
+    try {
+      const response = await fetch('http://localhost:9000/applications/new', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token, 
+        },
+        body: JSON.stringify(addApplicationData)
+      });
+      const data = await response.json();
+      if (response.status === 201) {
+      setApplicationData([...applicationData, data.savedApplication]);
+      setIsModalApplicationOpen(false);
       }
       return data;
     } catch (error) {
@@ -157,12 +173,20 @@ export default function CompanyCard() {
     }
   }
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openModalPosition = () => {
+    setIsModalPositionOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeModalPosition = () => {
+    setIsModalPositionOpen(false);
+  };
+
+  const openModalApplication = () => {
+    setIsModalApplicationOpen(true);
+  };
+
+  const closeModalApplication = () => {
+    setIsModalApplicationOpen(false);
   };
 
   return (
@@ -213,31 +237,45 @@ export default function CompanyCard() {
           <br/>
         </div>
         <div>
-          {positionsData.length > 0 ? (
+          {positionData.length > 0 ? (
             <div className={classes.tablepositions}>
               <h2>Positions</h2>
-              <PositionsTable data={positionsData} />    
+              <PositionsTable data={positionData} />    
               <br/>          
             </div>
           ) : (
             <div className={classes.tablepositions}>
               <h2>Positions</h2>
-              <p>You don't have any positions for this company. Bur you can start creating the first one!</p>
+              <p>You don't have any positions for this company. But you could create the first one!</p>
               <br/>
             </div>
           )}
           <div>
-            <button className={classes.btn} onClick={openModal}>Add new position</button>
-            {isModalOpen && <ModalAddPosition callback={addPosition} data={companyData} onClose={closeModal} />}
+            <button className={classes.btn} onClick={openModalPosition}>Add new position</button>
+            {isModalPositionOpen && <ModalAddPosition callback={addPosition} data={companyData} onClose={closeModalPosition} />}
             <br/>
           </div>
         </div>
-
-            {/* 
+        <div>
+          {applicationData.length > 0 ? (
             <div className={classes.tableapplications}>
-                <h2>Applications</h2>                              
-                <ApplicationsTable data={positionsData} />  
-            </div> */}
+              <h2>Applications</h2>
+              <ApplicationsTable data={applicationData} />    
+              <br/>          
+            </div>
+          ) : (
+            <div className={classes.tableapplications}>
+              <h2>Applications</h2>
+              <p>You don't have any applications for this company. But you could create the first one!</p>
+              <br/>
+            </div>
+          )}
+          <div>
+            <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
+            {isModalApplicationOpen && <ModalAddApplication callback={addApplication} companydata={companyData} positiondata={positionData} onClose={closeModalApplication} />}
+            <br/>
+          </div>
+        </div>
             <div className={classes.cardButtons}>
             {isEdited === false ? (
               <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Back</button>

@@ -15,24 +15,60 @@ const db = knex({
   });
 
 export class Application {
-    constructor(status, senddate, positionid, userid = null) {
-        this.userid = userid;
-        this.positionid = positionid;
+    constructor(status, senddate, positionid, userid) {        
         this.status = status;       
-        this.senddate = senddate;        
+        this.senddate = senddate;
+        this.positionid = positionid;
+        this.userid = userid;        
     }
 
-    save(userid) {
+    save() {
         return db("application").insert({
             status: this.status,   
             senddate: this.senddate,                       
             positionid: this.positionid,
-            userid: userid,
+            userid: this.userid,
+        })
+    };
+
+    fetch() {
+        return db
+        .select("*").from("application").where("positionid", this.positionid).first();
+    };
+
+    isExisting() {
+        return db("application").where("positionid", this.positionid).first();
+    };
+
+    static delete(applicationid) {
+        return db("application").where("applicationid", applicationid).delete();
+    };
+
+    static update(applicationid, status) {
+        return db("application").where("applicationid", applicationid).update({
+            status: status
         })
     };
 
     static fetchAll(userid) {
         return db
-        .select("application.*", "company.companyname", "position.title", "position.url", "position.discoverydate").from("application").join("position", "application.positionid", "position.positionid").join("company", "position.companyid", "company.companyid").where("application.userid", userid);
+        .select("application.*", "company.companyname", "position.title", "position.url")
+        .from("application")
+        .join("position", "application.positionid", "position.positionid")
+        .join("company", "position.companyid", "company.companyid")
+        .where("application.userid", userid);
+    };
+
+    static fetchById(positionid) {
+        return db
+        .select("*").from("application").where("positionid", positionid);
+    };
+
+    static fetchAllForCompany(companyid) {
+        return db
+        .select("application.*", "position.title", "position.url")
+        .from("application")
+        .join("position", "application.positionid", "position.positionid")
+        .where("position.companyid", companyid);
     };
 }

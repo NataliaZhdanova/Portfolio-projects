@@ -1,21 +1,20 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from "react";
+
 import classes from "./AllPositions.module.css";
 import NewPositionForm from './NewPositionCard';
+
 import { getAuthToken } from '../utils/auth.js';
 import { getUserId } from '../utils/userId.js';
 
 export default function AllPositions() {    
     const [positionData, setPositionData] = useState([]);
     const [isAddingPosition, setIsAddingPosition] = useState(false);
-    const [editingPosition, setEditingPosition] = useState(null);
-    const [editedTitle, setEditedTitle] = useState('');
-    const [editedUrl, setEditedUrl] = useState('');
-    const [editedRequirements, setEditedRequirements] = useState('');
-    const [editedKeywords, setEditedKeywords] = useState('');
 
     const token = getAuthToken();
     const userId = getUserId();
+
+// Fetch positions data from the database
       
     const fetchData = async () => {
       try {
@@ -32,6 +31,15 @@ export default function AllPositions() {
         console.error('Error fetching position data:', error);
       }
     };
+// Use ref to store the function so that it can be called in useEffect
+
+  const fetchDataRef = useRef(fetchData);
+
+// Call the function in useEffect
+
+    useEffect(() => {
+      fetchDataRef.current();
+    }, []);
 
     // Delete a position from the database
 
@@ -44,74 +52,45 @@ export default function AllPositions() {
           }
         });
         const data = await response.json();
-        fetchData();
+        setPositionData(positionData.filter(position => position.positionid !== positionid));
         return data;
       } catch (error) {
         console.error('Error deleting position:', error);
       }
     };
 
-// Update a position in the database
+// Add a new position to the database
 
-    const updatePosition = async (positionid) => {
-      try {
-        const response = await fetch('http://localhost:9000/positions/update/' + positionid, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token, 
-          },
-          body: JSON.stringify({
-            title: editedTitle,
-            url: editedUrl,
-            requirements: editedRequirements,
-            keywords: editedKeywords,
-          })
-        });
-        const data = await response.json();
-        fetchData();
-        return data; 
-      } catch (error) {
-        console.error('Error updating position:', error);
-      }
-    }; 
-
-// Use ref to store the function so that it can be called in useEffect
-
-const fetchDataRef = useRef(fetchData);
-
-// Call the function in useEffect
-
-    useEffect(() => {
-      fetchDataRef.current();
-    }, []);
-
-// Handlers for adding, editing, and deleting positions
-
-    const handleAddPositionClick = () => {
-      setIsAddingPosition(true);
-    };
-
-    const handleEditClick = (position) => {
-      setEditingPosition(position);
-      setEditedTitle(position.title);
-      setEditedUrl(position.url);
-      setEditedRequirements(position.requirements);
-      setEditedKeywords(position.keywords);
+const addPosition = async (addPositionData) => {
+  try {
+    const response = await fetch('http://localhost:9000/positions/new', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token, 
+      },
+      body: JSON.stringify(addPositionData)
+    });
+    const data = await response.json();
+    if (response.status === 201) {
+    setPositionData([...positionData, data.savedPosition]);
+    setIsAddingPosition(false);
     }
+    return data;
+  } catch (error) {
+    console.error('Error adding position:', error);
+  }
+};
 
-    const handleCancelClick = () => {
-      setEditingPosition(null);
-    }
+// Handlers for adding and deleting positions
 
-    const handleSaveClick = (positionid) => {
-      updatePosition(positionid);
-      setEditingPosition(null);
-    }
+const handleAddPositionClick = () => {
+  setIsAddingPosition(true);
+};
 
-    const handleDeleteClick = (positionid) => {
-      deletePosition(positionid);
-    }
+const handleDeleteClick = (positionid) => {
+  deletePosition(positionid);
+}
   
     return (
       <div className={classes.positions}>
@@ -131,23 +110,13 @@ const fetchDataRef = useRef(fetchData);
             {positionData.map((position) => (
               <tr key={position.positionid}>
                 <td>{position.companyname}</td>
-                <td>{editingPosition === position ? <input type="text" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} /> : position.title}</td>
-                <td>{editingPosition === position ? <input type="text" value={editedUrl} onChange={(e) => setEditedUrl(e.target.value)} /> : position.url}</td>
-                <td>{editingPosition === position ? <textarea rows="10" cols="50" value={editedRequirements} onChange={(e) => setEditedRequirements(e.target.value)} /> : position.requirements}</td>
-                <td>{editingPosition === position ? <textarea rows="10" cols="50" value={editedKeywords} onChange={(e) => setEditedKeywords(e.target.value)} /> : position.keywords}</td>
+                <td><a href={`/positions/${position.positionid}`}>{position.title}</a></td>
+                <td><a href={`${position.url}`}>{position.url}</a></td>
+                <td>{position.requirements}</td>
+                <td>{position.keywords}</td>
                 <td>{position.discoverydate}</td>
                 <td>
-                  {editingPosition === position ? (
-                    <>
-                      <button onClick={() => handleSaveClick(position.positionid)}>Save</button>
-                      <button onClick={handleCancelClick}>Cancel</button>
-                    </>
-                  ) : (
-                    <>
-                    <button onClick={() => handleEditClick(position)}>Edit</button>
-                    <button onClick={() => handleDeleteClick(position.positionid)}>Delete</button>
-                    </>
-                  )}
+                  <button onClick={() => handleDeleteClick(position.positionid)}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -157,9 +126,9 @@ const fetchDataRef = useRef(fetchData);
         <div>
         <br></br>      
         <button className={classes.btn} type="button" id="addNewPosition" onClick={handleAddPositionClick}>Add Position</button>
-        {isAddingPosition && (
-        <NewPositionForm onCancel={() => setIsAddingPosition(false)} />
-        )}
+          {isAddingPosition && (
+          <NewPositionForm callback={addPosition} onCancel={() => setIsAddingPosition(false)} />
+          )}
       </div>
       </div>
       

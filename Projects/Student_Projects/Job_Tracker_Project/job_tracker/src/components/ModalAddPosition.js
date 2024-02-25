@@ -1,5 +1,5 @@
 import { Form } from 'react-router-dom'
-import classes from "./NewPositionForm.module.css";
+import classes from "./ModalAddPosition.module.css";
 
 const ModalAddPosition = ({ callback, data, onClose }) => {
     const companyData = data;
@@ -21,7 +21,7 @@ const ModalAddPosition = ({ callback, data, onClose }) => {
          
     };
     return (
-        <div className="modal">
+        <div className={classes.modal}>
         <div className={classes.addnewform}>
         <h1>Add new Position</h1>
             <Form id="newPositionForm" className={classes.form}>

@@ -38,19 +38,6 @@ export class Position {
         })
     };
 
-    static delete(positionid) {
-        return db("position").where("positionid", positionid).delete();
-    };
-
-    static update(positionid, title, url, requirements, keywords) {
-        return db("position").where("positionid", positionid).update({
-            title: title,
-            url: url,
-            requirements: requirements,
-            keywords: keywords
-        })
-    };
-
     fetch() {
         return db
         .select("*").from("position").where("companyid", this.companyid).where("url", this.url).first();
@@ -87,4 +74,4 @@ export class Position {
         return db
         .select("*").from("position").where("companyid", companyid);
     };
-}
+} 

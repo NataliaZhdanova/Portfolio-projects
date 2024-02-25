@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import classes from "./AllCompanies.module.css";
 import NewCompanyForm from './NewCompanyCard';
 
 import { getAuthToken } from '../utils/auth.js';
-import { getUserId } from '../utils/userId.js';
+import { getUserId } from '../utils/userId.js'; 
 
 export default function AllCompanies() {
   const [companyData, setCompanyData] = useState([]);
@@ -73,7 +73,6 @@ export default function AllCompanies() {
         body: JSON.stringify(addCompanyData)
       });
       const data = await response.json();
-      console.log(data.savedCompany);
       if (response.status === 201) {
       setCompanyData([...companyData, data.savedCompany]);
       setIsAddingCompany(false);

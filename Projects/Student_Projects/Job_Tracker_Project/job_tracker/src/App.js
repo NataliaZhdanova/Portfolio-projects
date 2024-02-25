@@ -4,7 +4,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import AuthenticationPage, { action as authAction } from "./pages/Authentication.js";
 import DashboardPage from './pages/Dashboard.js';
 import CompaniesPage from './pages/CompaniesPage.js';
-import PositionsPage from './pages/Positions.js';
+import PositionsPage from './pages/PositionsPage.js';
+import ApplicationsPage from './pages/ApplicationsPage.js';
 import CompanyPage from './pages/CompanyPage.js';
 import { action as logout } from './pages/Logout.js';
 
@@ -45,11 +46,17 @@ const router = createBrowserRouter([
 
     },
     // {
-    //   path: '/applications',
-    //   element: <ApplicationsPage />,
+    //   path: '/positions:positionId',
+    //   element: <PositionPage />,
     //   loader: checkAuthLoader,
 
     // },
+    {
+      path: '/applications',
+      element: <ApplicationsPage />,
+      loader: checkAuthLoader,
+
+    },
     {
       path: '/logout',
       action: logout
