@@ -6,7 +6,7 @@ body {
     justify-content: center;
 }
 
-.companies {
+.applications {
     background-color: white;
     width: 1280px;
     margin-top: 20px;
@@ -60,5 +60,5 @@ td {
     color: teal;
     border: 2px solid teal;
     border-radius: 4px;
-  }
+  } 
   

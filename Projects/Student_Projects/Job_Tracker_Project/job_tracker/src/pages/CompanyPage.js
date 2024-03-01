@@ -1,3 +1,11 @@
+// CompaniesPage -> includes -> AllCompanies
+// AllCompanies -> is extended by -> NewCompanyCard
+// AllCompanies -> CompanyPage -> includes -> CompanyCard
+// CompanyCard -> includes -> PositionsTable
+// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
+// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
 import React from 'react';
 import { useSubmit } from "react-router-dom";
 import { useEffect } from "react";

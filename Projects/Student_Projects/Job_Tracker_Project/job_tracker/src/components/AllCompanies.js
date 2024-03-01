@@ -1,3 +1,11 @@
+// CompaniesPage -> includes -> AllCompanies
+// AllCompanies -> is extended by -> NewCompanyCard
+// AllCompanies -> CompanyPage -> includes -> CompanyCard
+// CompanyCard -> includes -> PositionsTable
+// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
+// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
 import * as React from 'react';
 import { useState, useEffect, useRef } from "react";
 
@@ -36,7 +44,7 @@ export default function AllCompanies() {
 
   const fetchDataRef = useRef(fetchData);
 
-// Call the function in useEffect
+// Call the function in useEffect 
 
   useEffect(() => {
     fetchDataRef.current();

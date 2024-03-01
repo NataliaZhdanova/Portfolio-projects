@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from 'dotenv'; 
 dotenv.config();
 
 import knex from "knex";
@@ -40,7 +40,7 @@ export class Position {
 
     fetch() {
         return db
-        .select("*").from("position").where("companyid", this.companyid).where("url", this.url).first();
+        .select("position.*", "company.companyname").from("position").join("company", "position.companyid", "company.companyid").where("position.companyid", this.companyid).where("position.url", this.url).first();
     };
 
     isExisting() {

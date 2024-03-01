@@ -39,6 +39,20 @@ export async function GetApplicationsForCompany(req, res, next) {
   }
 };
 
+export async function GetApplicationForPosition(req, res, next) {
+  try {
+      let positionid = req.params.positionid;
+
+      const application = await Application.fetchAllForPosition(positionid);
+
+      res.status(200).json(application);
+
+  } catch (error) {
+      console.error("Error fetching applications:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Add a new application to the database
 
 export async function AddApplicationToDB(req, res, next) {

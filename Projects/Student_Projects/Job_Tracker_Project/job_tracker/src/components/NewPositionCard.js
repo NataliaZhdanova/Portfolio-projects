@@ -1,98 +1,91 @@
-// PositionsPage -> is extended by -> NewPositionCard
-// PositionsPage -> PositionPage -> includes -> PositionCard
+// PositionsPage -> includes -> AllPositions
+// AllPositions -> is extended by -> NewPositionCard
+// AllPositions -> PositionPage -> includes -> PositionCard
 // PositionCard -> includes -> ApplicationsTable
 // PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 
-import { useState, useEffect, useRef } from "react";
 import { Form, useSubmit } from 'react-router-dom'
+import { useState } from "react";
 import classes from "./NewPositionForm.module.css";
-import { getAuthToken } from '../utils/auth.js';
 import { getUserId } from '../utils/userId.js';
 
-function NewPositionForm({ onCancel }) {
-  const [companyData, setCompanyData] = useState([]);
-  const token = getAuthToken();
+function NewPositionForm({ companyData, callback, onCancel }) {
+  const [selectedCompany, setSelectedCompany] = useState("");
   const userId = getUserId();
-
-  // Fetch all companies from the database
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:9000/companies/all/' + userId, {
-        method: "GET",
-        headers: {
-          "Authorization": "Bearer " + token, 
-        }
-      }); 
-      const data = await response.json();
-      setCompanyData(data);
-      return data
-     } catch (error) {
-      console.error('Error fetching company data:', error);
-    }
-  };
-
-  // Use ref to store the function so that it can be called in useEffect
-
-  const fetchDataRef = useRef(fetchData);
-
-  // Call the function in useEffect
-  
-  useEffect(() => {
-    fetchDataRef.current();
-  }, []);
+  const data = companyData;
+  console.log(data);
 
   const submit = useSubmit();
-    const handleSubmit = (e) => {
-    e.preventDefault();
- 
-    submit(e.currentTarget.form);
-    e.currentTarget.form.reset(); 
+  
+  const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const addPositionData = {
+    url: e.currentTarget.form.positionURL.value,
+    title: e.currentTarget.form.positionTitle.value,
+    requirements: e.currentTarget.form.requirements.value,
+    keywords: e.currentTarget.form.keywords.value,
+    discoverydate: e.currentTarget.form.discoveryDate.value,
+    companyid: selectedCompany,
+    userid: userId,
+  }; 
+
+  callback(addPositionData);
+
+  submit(e.currentTarget.form);
+  e.currentTarget.form.reset(); 
+      
   };
 
-return (
-      <div className={classes.addnewform}>
-        <h1>Add new Position</h1>
-            <Form id="newPositionForm" className={classes.form}>
+  // Handle company selection change
+  const handleCompanyChange = (event) => {
+    setSelectedCompany(event.target.value);
+  }; 
+
+  return (
+    <div className={classes.addnewform}>
+      <h1>Add new Position</h1>
+      <Form id="newPositionForm" className={classes.form}>
             
-                <div className="form-control">
-                    <label htmlFor="companyName">Select Company:</label><br/>
-                    <select id="companyName" name="companyName" required>
-                        {companyData.map((company) => (
-                            <option key={company.companyid} value={company.companyid}>{company.companyname}</option>
-                        ))}
-                    </select>
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="positionTitle">Position Title:</label><br/>
-                    <input type="text" id="positionTitle" name="positionTitle" required />
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="positionURL">Company URL:</label><br/>
-                    <input type="text" id="positionURL" name="positionURL" required />
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="requirements">Requirements:</label><br/>
-                    <textarea id="requirements" name="requirements" rows="5" cols="140"></textarea>
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="keywords">Keywords:</label><br/>
-                    <textarea id="keywords" name="keywords" rows="5" cols="140"></textarea>
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="discoveryDate">Discovery Date:</label><br/>
-                    <input type="text" id="discoveryDate" name="discoveryDate" required /><br/><br/>
-                </div>
-                <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
-                <button className={classes.btn} onClick={onCancel}>Cancel</button>
-            </Form>
-            
+        <div className="form-control">
+          <label htmlFor="companyName">Select Company:</label><br/>
+          <select value={selectedCompany} onChange={handleCompanyChange} id="companyName" name="companyName" required>
+          <option value="">Select company</option>
+            {data.map((company) => (
+              <option key={company.companyid} value={company.companyid}>{company.companyname}</option>
+            ))}
+          </select>
         </div>
+        <br/>
+        <div className="form-control">
+          <label htmlFor="positionTitle">Position Title:</label><br/>
+          <input type="text" id="positionTitle" name="positionTitle" required />
+        </div>
+        <br/>
+        <div className="form-control">
+          <label htmlFor="positionURL">Position URL:</label><br/>
+          <input type="text" id="positionURL" name="positionURL" required />
+        </div>
+        <br/>
+        <div className="form-control">
+          <label htmlFor="requirements">Requirements:</label><br/>
+          <textarea id="requirements" name="requirements" rows="5" cols="140"></textarea>
+        </div>
+        <br/>
+        <div className="form-control">
+          <label htmlFor="keywords">Keywords:</label><br/>
+          <textarea id="keywords" name="keywords" rows="5" cols="140"></textarea>
+        </div>
+        <br/>
+        <div className="form-control">
+          <label htmlFor="discoveryDate">Discovery Date:</label><br/>
+          <input type="date" id="discoveryDate" name="discoveryDate" required /><br/><br/>
+        </div>
+        <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
+        <button className={classes.btn} onClick={onCancel}>Cancel</button>
+      </Form>
+            
+    </div>
   );
 }
 

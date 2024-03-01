@@ -1,9 +1,18 @@
+// CompaniesPage -> includes -> AllCompanies
+// AllCompanies -> is extended by -> NewCompanyCard
+// AllCompanies -> CompanyPage -> includes -> CompanyCard
+// CompanyCard -> includes -> PositionsTable
+// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
+// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
 import { Form } from 'react-router-dom';
 import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import classes from "./CompanyCard.module.css";
 import { getAuthToken } from '../utils/auth.js';
+
 import ModalAddPosition from './ModalAddPosition.js';
 import ModalAddApplication from './ModalAddApplication.js';
 import PositionsTable from './PositionsTable.js';
@@ -13,17 +22,23 @@ export default function CompanyCard() {
   const [companyData, setCompanyData] = useState([]);
   const [positionData, setPositionData] = useState([]);
   const [applicationData, setApplicationData] = useState([]);
+
   const [isEdited, setIsEdited] = useState(false); 
   const [editedCompanyName, setEditedCompanyName] = useState('');
   const [editedUrl, setEditedUrl] = useState('');
   const [editedBusinessOverview, setEditedBusinessOverview] = useState('');
+
   const [isModalPositionOpen, setIsModalPositionOpen] = useState(false);
   const [isModalApplicationOpen, setIsModalApplicationOpen] = useState(false);
+  
   const token = getAuthToken();
-      
+
+  const companyId = window.location.pathname.split("/").pop();
+
+// Fetch company data from the server
+
   const fetchData = async () => {
     try {
-      const companyId = window.location.pathname.split("/").pop();
       const response = await fetch('http://localhost:9000/companies/' + companyId, {
         method: "GET",
         headers: {
@@ -32,17 +47,18 @@ export default function CompanyCard() {
       }); 
       const data = await response.json();
       setCompanyData(data[0]);
-      return data
+      return data;
 
     } catch (error) {
       console.error('Error fetching company data:', error);
     }
   };
 
+// Fetch position data from the server
+
   const fetchPositions = async () => {
-    try {
-      const companyId = window.location.pathname.split("/").pop();
-      const response = await fetch('http://localhost:9000/positions/' + companyId, {
+    try {  
+      const response = await fetch('http://localhost:9000/positions/forcompany/' + companyId, {
         method: "GET",
         headers: {
           "Authorization": "Bearer " + token, 
@@ -50,16 +66,18 @@ export default function CompanyCard() {
       }); 
       const data = await response.json();
       setPositionData(data);
-      return data
+      return data;
+
     } catch (error) {
       console.error('Error fetching position data:', error);
     }
   };  
 
+// Fetch application data from the server
+
   const fetchApplications = async () => {
     try {
-      const companyId = window.location.pathname.split("/").pop();
-      const response = await fetch('http://localhost:9000/applications/' + companyId, {
+       const response = await fetch('http://localhost:9000/applications/forcompany/' + companyId, {
         method: "GET",
         headers: {
           "Authorization": "Bearer " + token, 
@@ -67,15 +85,20 @@ export default function CompanyCard() {
       }); 
       const data = await response.json();
       setApplicationData(data);
-      return data
+      return data;
+
     } catch (error) {
       console.error('Error fetching application data:', error);
     }
   };
   
+  // Use ref to keep track of the function references
+
   const fetchDataRef = useRef(fetchData);
   const fetchPositionsRef = useRef(fetchPositions);
-  const fetchApplicationsRef = useRef(fetchApplications);   
+  const fetchApplicationsRef = useRef(fetchApplications);
+
+// Fetch data when the component mounts
 
   useEffect(() => {
     fetchDataRef.current();
@@ -83,6 +106,8 @@ export default function CompanyCard() {
     fetchApplicationsRef.current();
   }, []);
  
+// Update company data
+
   const updateCompany = async (companyid) => {
     try {
       
@@ -101,10 +126,13 @@ export default function CompanyCard() {
       const data = await response.json();
       setCompanyData(data.updatedCompany[0]);
       return data;
+
     } catch (error) {
       console.error('Error updating company:', error);
     }
   };
+
+// Add new position
 
   const addPosition = async (addPositionData) => {
     try {
@@ -122,10 +150,13 @@ export default function CompanyCard() {
       setIsModalPositionOpen(false);
       }
       return data;
+
     } catch (error) {
-      console.error('Error adding company:', error);
+      console.error('Error adding position:', error);
     }
   };
+
+// Add new application
 
   const addApplication = async (addApplicationData) => {
     try {
@@ -143,11 +174,13 @@ export default function CompanyCard() {
       setIsModalApplicationOpen(false);
       }
       return data;
+
     } catch (error) {
-      console.error('Error adding company:', error);
+      console.error('Error adding application:', error);
     }
   };
 
+// Handle Edit button click
 
   const handleEditClick = (e) => {
     setIsEdited(true); 
@@ -155,6 +188,8 @@ export default function CompanyCard() {
     setEditedUrl(companyData.url);
     setEditedBusinessOverview(companyData.businessoverview);
   }
+
+// Handle form submit
 
   const handleSubmit = async (e) => {
     e.preventDefault();    
@@ -164,6 +199,8 @@ export default function CompanyCard() {
     }
   }
 
+// Handle form submit and close
+
   const handleSubmitClose = async (e) => {
     e.preventDefault();    
     updateCompany(companyData.companyid);
@@ -172,6 +209,8 @@ export default function CompanyCard() {
       window.location.replace('/companies')
     }
   }
+
+// Open and close modals for adding positions and applications
 
   const openModalPosition = () => {
     setIsModalPositionOpen(true);
@@ -190,103 +229,104 @@ export default function CompanyCard() {
   };
 
   return (
-      <div className={classes.companypage}>
-        <div className={classes.companypageheader}>
-          <h1 className={classes.companyh1}>Company Card</h1>
-          {isEdited === false ? (
-            <button className={classes.editbutton} onClick={handleEditClick}>
-              <FontAwesomeIcon icon={faPen} size="xl" color={"#008080"} />
-            </button>
-          ) : (
-            <div className={classes.editingbutton}>
-              <FontAwesomeIcon icon={faPen} size="xl" color={"#a7a7a7"} />
-            </div>
-          )}
-        </div>
-        <div className={classes.companydata}>
-          <Form id="companyForm" className={classes.form}>
+    <div className={classes.companypage}>
+      <div className={classes.companypageheader}>
+        <h1 className={classes.companyh1}>Company Card</h1>
+        {isEdited === false ? (
+          <button className={classes.editbutton} onClick={handleEditClick}>
+            <FontAwesomeIcon icon={faPen} size="xl" color={"#008080"} />
+          </button>
+        ) : (
+          <div className={classes.editingbutton}>
+            <FontAwesomeIcon icon={faPen} size="xl" color={"#a7a7a7"} />
+          </div>
+        )}
+      </div>
+      <div className={classes.companydata}>
+        <Form id="companyForm" className={classes.form}>
                 
-            <div className="form-control">
-              <label htmlFor="companyName">Company Name:</label><br/>
-              {isEdited === false ? (
-                <input type="text" id="companyName" name="companyName" value={companyData.companyname} />
-              ) : (
-                <input type="text" id="companyName" name="companyName" value={editedCompanyName} onChange={(e) => setEditedCompanyName(e.target.value)} />
-              )}
-            </div>
-            <br/>
-            <div className="form-control">
-              <label htmlFor="companyURL">Company URL:</label><br/>
-              {isEdited === false ? (
-                <input type="text" id="companyURL" name="companyURL" value={companyData.url} />
-              ) : (
-                <input type="text" id="companyURL" name="companyURL" value={editedUrl} onChange={(e) => setEditedUrl(e.target.value)} />
-              )}              
-            </div>
-            <br/>
-            <div className="form-control">
-              <label htmlFor="businessOverview">Business Overview:</label><br/>
-              {isEdited === false ? (
-                <textarea id="businessOverview" name="businessOverview" rows="5" cols="140" value={companyData.businessoverview} ></textarea>
-              ) : (
-                <textarea id="businessOverview" name="businessOverview" rows="5" cols="140" value={editedBusinessOverview} onChange={(e) => setEditedBusinessOverview(e.target.value)} ></textarea>
-              )}              
-            </div>
-                    
-          </Form>
+          <div className="form-control">
+            <label htmlFor="companyName">Company Name:</label><br/>
+            {isEdited === false ? (
+              <input type="text" id="companyName" name="companyName" value={companyData.companyname} />
+            ) : (
+              <input type="text" id="companyName" name="companyName" value={editedCompanyName} onChange={(e) => setEditedCompanyName(e.target.value)} />
+            )}
+          </div>
           <br/>
-        </div>
-        <div>
-          {positionData.length > 0 ? (
-            <div className={classes.tablepositions}>
-              <h2>Positions</h2>
-              <PositionsTable data={positionData} />    
-              <br/>          
-            </div>
-          ) : (
-            <div className={classes.tablepositions}>
-              <h2>Positions</h2>
-              <p>You don't have any positions for this company. But you could create the first one!</p>
-              <br/>
-            </div>
-          )}
+          <div className="form-control">
+            <label htmlFor="companyURL">Company URL:</label><br/>
+            {isEdited === false ? (
+              <input type="text" id="companyURL" name="companyURL" value={companyData.url} />
+            ) : (
+              <input type="text" id="companyURL" name="companyURL" value={editedUrl} onChange={(e) => setEditedUrl(e.target.value)} />
+            )}              
+          </div>
+          <br/>
+          <div className="form-control">
+            <label htmlFor="businessOverview">Business Overview:</label><br/>
+            {isEdited === false ? (
+              <textarea id="businessOverview" name="businessOverview" rows="5" cols="140" value={companyData.businessoverview} ></textarea>
+            ) : (
+              <textarea id="businessOverview" name="businessOverview" rows="5" cols="140" value={editedBusinessOverview} onChange={(e) => setEditedBusinessOverview(e.target.value)} ></textarea>
+            )}              
+          </div>
+                    
+        </Form>
+        <br/>
+      </div>
+      <div>
+        {positionData.length > 0 ? (
+          <div className={classes.tablepositions}>
+            <h2>Positions</h2>
+            <PositionsTable data={positionData} />    
+            <br/>          
+          </div>
+        ) : (
+          <div className={classes.tablepositions}>
+            <h2>Positions</h2>
+            <p>You don't have any positions for this company. But you could create the first one!</p>
+            <br/>
+          </div>
+        )}
           <div>
             <button className={classes.btn} onClick={openModalPosition}>Add new position</button>
             {isModalPositionOpen && <ModalAddPosition callback={addPosition} data={companyData} onClose={closeModalPosition} />}
             <br/>
           </div>
-        </div>
-        <div>
-          {applicationData.length > 0 ? (
-            <div className={classes.tableapplications}>
-              <h2>Applications</h2>
-              <ApplicationsTable data={applicationData} />    
-              <br/>          
-            </div>
-          ) : (
-            <div className={classes.tableapplications}>
-              <h2>Applications</h2>
-              <p>You don't have any applications for this company. But you could create the first one!</p>
-              <br/>
-            </div>
-          )}
-          <div>
-            <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
-            {isModalApplicationOpen && <ModalAddApplication callback={addApplication} companydata={companyData} positiondata={positionData} onClose={closeModalApplication} />}
+      </div>
+      <div>
+        {applicationData.length > 0 ? (
+          <div className={classes.tableapplications}>
+            <h2>Applications</h2>
+            <ApplicationsTable data={applicationData} />    
+            <br/>          
+          </div>
+        ) : (
+          <div className={classes.tableapplications}>
+            <h2>Applications</h2>
+            <p>You don't have any applications for this company. But you could create the first one!</p>
             <br/>
           </div>
+        )}
+        <div>
+          <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
+            {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionData} onClose={closeModalApplication} />}
+          <br/>
         </div>
-            <div className={classes.cardButtons}>
-            {isEdited === false ? (
-              <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Back</button>
-            ) : (
-              <>
-                <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
-                <button className={classes.btn} type="submit" onClick={handleSubmitClose}>Save & Close</button>
-                <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Close without saving</button>
-              </>
-            )}
-            </div>
-        </div>
+      </div>
+    <br/>
+    <div className={classes.cardButtons}>
+      {isEdited === false ? (
+        <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Back</button>
+      ) : (
+        <>
+          <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
+          <button className={classes.btn} type="submit" onClick={handleSubmitClose}>Save & Close</button>
+          <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Close without saving</button>
+        </>
+      )}
+    </div>
+    </div>
   );
 }

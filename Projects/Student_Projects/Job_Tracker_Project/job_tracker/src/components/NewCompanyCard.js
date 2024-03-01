@@ -1,5 +1,6 @@
-// CompaniesPage -> is extended by -> NewCompanyCard
-// CompaniesPage -> CompanyPage -> includes -> CompanyCard
+// CompaniesPage -> includes -> AllCompanies
+// AllCompanies -> is extended by -> NewCompanyCard
+// AllCompanies -> CompanyPage -> includes -> CompanyCard
 // CompanyCard -> includes -> PositionsTable
 // CompanyCard -> includes -> ApplicationsTable
 // CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
@@ -58,6 +59,6 @@ function NewCompanyForm({ callback, onCancel }) {
             
         </div>
   );
-}
+} 
 
 export default NewCompanyForm;

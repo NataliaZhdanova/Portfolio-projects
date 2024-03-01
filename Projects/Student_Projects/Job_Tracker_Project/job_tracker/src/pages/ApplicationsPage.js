@@ -1,3 +1,7 @@
+// ApplicationsPage -> includes -> AllApplications
+// AllApplications -> is extended by -> NewApplicationCard
+// AllApplications -> ApplicationPage -> includes -> ApplicationCard
+
 import React from 'react';
 import { useSubmit } from "react-router-dom";
 import { useEffect } from "react";

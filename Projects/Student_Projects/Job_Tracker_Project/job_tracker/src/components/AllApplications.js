@@ -1,3 +1,7 @@
+// ApplicationsPage -> includes -> AllApplications
+// AllApplications -> is extended by -> NewApplicationCard
+// AllApplications -> ApplicationPage -> includes -> ApplicationCard
+
 import * as React from 'react';
 import { useState, useEffect, useRef } from "react";
 
@@ -10,11 +14,32 @@ import { getUserId } from '../utils/userId.js';
 export default function AllApplications() {    
   const [applicationData, setApplicationData] = useState([]);
   const [isAddingApplication, setIsAddingApplication] = useState(false);
+  const [positionData, setPositionData] = useState([]);
 
   const token = getAuthToken();
   const userId = getUserId();
+
+// Fetch positions data from the database for drop-down menus
       
-  const fetchData = async () => {
+  const fetchPositionsData = async () => {
+    try {
+      const response = await fetch('http://localhost:9000/positions/all/' + userId, {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token, 
+        }
+      }); 
+      const data = await response.json();
+      setPositionData(data);
+      return data
+    } catch (error) {
+      console.error('Error fetching positions:', error);
+    }
+  };
+
+// Fetch applications data from the database
+
+  const fetchApplicationsData = async () => {
     try {
       const response = await fetch('http://localhost:9000/applications/all/' + userId, {
         method: "GET",
@@ -32,12 +57,14 @@ export default function AllApplications() {
 
 // Use ref to store the function so that it can be called in useEffect
 
-  const fetchDataRef = useRef(fetchData);
+  const fetchPositionsDataRef = useRef(fetchPositionsData);
+  const fetchApplicationsDataRef = useRef(fetchApplicationsData);
 
 // Call the function in useEffect
 
   useEffect(() => {
-    fetchDataRef.current();
+    fetchPositionsDataRef.current();
+    fetchApplicationsDataRef.current();
   }, []); 
 
 // Delete an application from the database
@@ -49,14 +76,14 @@ export default function AllApplications() {
         headers: {
           "Authorization": "Bearer " + token, 
         }
-      });
+      }); 
       const data = await response.json();
       setApplicationData(applicationData.filter(application => application.applicationid !== applicationid));
       return data;
     } catch (error) {
       console.error('Error deleting application:', error);
     }
-  };
+  }; 
 
 // Add a new company to the database
 
@@ -81,7 +108,7 @@ const addApplication = async (addApplicationData) => {
   }
 };
 
-// Handlers for adding and deleting companies
+// Handlers for adding and deleting applications
 
 const handleAddApplicationClick = () => {
   setIsAddingApplication(true);
@@ -90,40 +117,40 @@ const handleAddApplicationClick = () => {
 const handleDeleteClick = (applicationid) => {
   deleteApplication(applicationid);
 }
-    return (
-      <div className={classes.applications}>
-        <h1>Applications</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Company Name</th>
-              <th>Position Title</th>
-              <th>Position URL</th>
-              <th>Application Status</th>
-              <th>Send Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {applicationData.map((application) => (
-              <tr key={application.applicationid}>
-                <td>{application.companyname}</td>
-                <td><a href={`/applications/${application.applicationid}`}>{application.title}</a></td>
-                <td><a href={`${application.url}`}>{application.url}</a></td>
-                <td>{application.status}</td>
-                <td>{application.senddate}</td>
-                <td>
-                    <button onClick={() => handleDeleteClick(application.applicationid)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <br></br>
-        <div>
-        <br></br>      
-        <button className={classes.btn} type="button" id="addNewApplication" onClick={handleAddApplicationClick}>Add Application</button>
+return (
+  <div className={classes.applications}>
+    <h1>Applications</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Company Name</th>
+          <th>Position Title</th>
+          <th>Position URL</th>
+          <th>Application Status</th>
+          <th>Send Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {applicationData.map((application) => (
+          <tr key={application.applicationid}>
+            <td>{application.companyname}</td>
+            <td><a href={`/applications/${application.applicationid}`}>{application.title}</a></td>
+            <td><a href={`${application.url}`}>{application.url}</a></td>
+            <td>{application.status}</td>
+            <td>{application.senddate}</td>
+            <td>
+              <button onClick={() => handleDeleteClick(application.applicationid)}>Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <br></br>
+    <div>
+    <br></br>      
+      <button className={classes.btn} type="button" id="addNewApplication" onClick={handleAddApplicationClick}>Add Application</button>
           {isAddingApplication && (
-          <NewApplicationForm callback={addApplication} onCancel={() => setIsAddingApplication(false)} />
+          <NewApplicationForm positionData={positionData} callback={addApplication} onCancel={() => setIsAddingApplication(false)} />
         )}
       </div>
       </div>

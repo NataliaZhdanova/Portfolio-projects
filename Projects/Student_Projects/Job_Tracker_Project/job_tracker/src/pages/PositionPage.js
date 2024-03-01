@@ -4,16 +4,15 @@
 // PositionCard -> includes -> ApplicationsTable
 // PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 
-import React from 'react'; 
+import React from 'react';
 import { useSubmit } from "react-router-dom";
 import { useEffect } from "react";
 
-import AllPositions from "../components/AllPositions";
+import PositionCard from "../components/PositionCard";
 import NavBar from "../components/NavBar";
 import { getAuthToken, getTokenDuration } from '../utils/auth';
-import { getUserId } from '../utils/userId';
 
-function PositionsPage() {
+function PositionPage() {
   const token = getAuthToken();
   const submit = useSubmit();
 
@@ -33,16 +32,14 @@ function PositionsPage() {
       submit(null, { action: "/logout", method: "post"});
     }, tokenDuration);
   }, [token, submit]);
-  
- return (
+
+  return (
     <div>
         <NavBar />
         <main>
-        <AllPositions />
+        <PositionCard />
         </main>
-    </div>   
-  
+    </div>  
 );}
 
-export default PositionsPage;
-
+export default PositionPage;

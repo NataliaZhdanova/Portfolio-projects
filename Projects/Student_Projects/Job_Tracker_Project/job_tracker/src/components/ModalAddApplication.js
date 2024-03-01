@@ -1,29 +1,49 @@
+// CompaniesPage -> includes -> AllCompanies
+// AllCompanies -> is extended by -> NewCompanyCard
+// AllCompanies -> CompanyPage -> includes -> CompanyCard
+// CompanyCard -> includes -> PositionsTable
+// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
+// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
+// PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+
 import React, { useState } from "react";
 import { Form } from 'react-router-dom'
 import classes from "./ModalAddApplication.module.css";
+import { getUserId } from '../utils/userId.js'; 
 
-const ModalAddApplication = ({ callback, companydata, positiondata, onClose }) => {
+const ModalAddApplication = ({ callback, positiondata, onClose }) => {
+    const [selectedStatus, setStatus] = useState("");
+    const [selectedPosition, setSelectedPosition] = useState("");
     const positionData = positiondata;
-    const companyData = companydata;
-    const [selectedOption, setSelectedOption] = useState(null);
+    const userId = getUserId();
+
+    const status = ["Applied", "Phone interview", "HR interview", "Technical interview", "CEO interview", "Offer received", "Offer accepted", "Rejected"];
     
     const handleSubmit = (e) => {
     e.preventDefault(); 
 
     const addApplicationData = {        
-        status: e.currentTarget.form.applicationStatus.value,
-        senddate: e.currentTarget.form.sendDate.value,
-        positionid: e.currentTarget.form.positionName.value,
-        userid: companyData.userid
+        status: selectedStatus,
+        senddate: e.currentTarget.form.submissionDate.value,
+        positionid: selectedPosition,
+        userid: userId,
     };
 
     callback(addApplicationData);
          
     };
-    const handleOptionChange = (e) => {
-        setSelectedOption(e.target.value);
+
+    // Handle position selection change
+    const handlePositionChange = (event) => {
+        setSelectedPosition(event.target.value);
     };
     
+    // Handle status selection change 
+    const handleStatusChange = (event) => {
+        setStatus(event.target.value);
+    };
 
     return (
         <div className={classes.modal}>
@@ -32,35 +52,30 @@ const ModalAddApplication = ({ callback, companydata, positiondata, onClose }) =
             <Form id="newApplicationForm" className={classes.form}>
             
                 <div className="form-control">
-                    <label htmlFor="positionName">Select Position:</label><br/>
-                    <select id="positionName" name="positionName" value={selectedOption} onChange={handleOptionChange}>
+                    <label htmlFor="positionTitle">Select Position:</label><br/>
+                    <select value={selectedPosition} onChange={handlePositionChange} id="positionTitle" name="positionTitle" required>
+                    <option value="">Select Position</option>
                         {positionData.map((position) => (
-                        <option value={position.positionid}>
-                            {position.title}
-                        </option>
+                        <option key={position.positionid} value={position.positionid}>{position.title}</option>
                         ))}
                     </select>
                 </div>
                 <br/>
 
                 <div className="form-control">
-                    <label htmlFor="applicationStatus">Application Status:</label><br/>
-                    <select id="applicationStatus" name="applicationStatus" value={selectedOption} onChange={handleOptionChange}>
-                        <option value="Sent">Sent</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Phone Interview">Phone Interview</option>
-                        <option value="HR Interview">HR Interview</option>
-                        <option value="Technical Interview">Technical Interview</option>
-                        <option value="CEO Interview">CEO Interview</option>
-                        <option value="Offer">Offer</option>
-                        <option value="Offer Accepted">Offer Accepted</option>
+                    <label htmlFor="appStatus">Select application status:</label><br/>
+                    <select value={selectedStatus} onChange={handleStatusChange} id="appStatus" name="appStatus" required>
+                        <option key="appStatus" value="">Select application status</option>
+                        {status.map(element => (
+                            <option value={element}>{element}</option>
+                        ))}
                     </select>
                 </div>
                 <br/>
 
                 <div className="form-control">
-                    <label htmlFor="sendDate">Application Send Date:</label><br/>
-                    <input type="text" id="sendDate" name="sendDate" required /><br/><br/>
+                    <label htmlFor="submissionDate">Application Send Date:</label><br/>
+                    <input type="date" id="submissionDate" name="submissionDate" required /><br/><br/>
                 </div>
                 <br/>
                 

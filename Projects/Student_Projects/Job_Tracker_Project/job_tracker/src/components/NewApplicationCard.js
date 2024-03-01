@@ -1,80 +1,133 @@
-// ApplicationsPage -> is extended by -> NewApplicationCard
-// ApplicationsPage -> ApplicationPage -> includes -> ApplicationCard
+// ApplicationsPage -> includes -> AllApplications
+// AllApplications -> is extended by -> NewApplicationCard
+// AllApplications -> ApplicationPage -> includes -> ApplicationCard 
 
-import { useState, useEffect, useRef } from "react";
 import { Form, useSubmit } from 'react-router-dom'
 import classes from "./NewApplicationForm.module.css";
-import { getAuthToken } from '../utils/auth.js';
+import { useState, useEffect } from "react";
 import { getUserId } from '../utils/userId.js';
 
-function NewApplicationForm({ onCancel }) {
-    const [companyData, setCompanyData] = useState([]);
-    const [positionData, setPositionData] = useState([]);
-    const token = getAuthToken();
-    const userId = getUserId();
-
-    // Fetch all companies from the database
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:9000/companies/all/' + userId, {
-        method: "GET",
-        headers: {
-          "Authorization": "Bearer " + token, 
-        }
-      }); 
-      const data = await response.json();
-      setCompanyData(data);
-      return data
-     } catch (error) {
-      console.error('Error fetching company data:', error);
-    }
-  };
-
-  // Use ref to store the function so that it can be called in useEffect
-
-  const fetchDataRef = useRef(fetchData);
-
-  // Call the function in useEffect
+function NewApplicationForm({ positionData, callback, onCancel }) {
+  const [positions, setPositions] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState("");
+  const [selectedStatus, setStatus] = useState("");
+  const userId = getUserId();
+  const data = positionData;
+  const submit = useSubmit();
   
-  useEffect(() => {
-    fetchDataRef.current();
-  }, []);
+  const handleSubmit = (e) => {
+  e.preventDefault();
 
-
-    const submit = useSubmit();
-    const handleSubmit = (e) => {
-    e.preventDefault();
- 
-    submit(e.currentTarget.form);
-    e.currentTarget.form.reset(); 
+  const addApplicationData = {
+    status: selectedStatus,
+    senddate: e.currentTarget.form.submissionDate.value,
+    positionid: selectedPosition,
+    userid: userId,
   };
 
-    return (
-      <div className={classes.addnewform}>
-        <h1>Add new Application</h1>
-            <Form id="newApplicationForm" className={classes.form}>
+  callback(addApplicationData);
+
+  submit(e.currentTarget.form);
+  e.currentTarget.form.reset(); 
+      
+  };
+  
+// Prepare data to populate company and position dropdowns
+
+  const companyData = [];
+
+  data.forEach(position => {
+    const companyId = position.companyid;
+    const existingCompany = companyData.find(company => company.companyid === companyId);
+    if (!existingCompany) {
+        companyData.push({
+            companyid: companyId,
+            companyname: position.companyname,
+            positions: [[ position.positionid, position.title ]]
+        });
+    } else {
+        
+        existingCompany.positions.push([ position.positionid, position.title ]);
+    }
+});
+
+console.log(companyData);
+
+// Update positions dropdown when selected company changes
+
+  useEffect(() => {
+    if (selectedCompany) {
+      const company = companyData.find(company => company.companyid === selectedCompany);
+      setPositions(company.positions);
+    } else {
+      setPositions([]);
+    }
+  }, [selectedCompany]);
+
+  const status = ["Applied", "Phone interview", "HR interview", "Technical interview", "CEO interview", "Offer received", "Offer accepted", "Rejected"];
+
+
+  // Handle company selection change
+  const handleCompanyChange = (event) => {
+    setSelectedCompany(event.target.value);
+  }; 
+
+  // Handle position selection change
+  const handlePositionChange = (event) => {
+    setSelectedPosition(event.target.value);
+  };
+
+  // Handle status selection change 
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
+
+  return (
+    <div className={classes.addnewform}>
+      <h1>Add new Application</h1>
+      <Form id="newApplicationForm" className={classes.form}>
             
-                <div className="form-control">
-                    <label htmlFor="companyName">Company Name:</label><br/>
-                    <input type="text" id="companyName" name="companyName" required />
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="companyURL">Company URL:</label><br/>
-                    <input type="text" id="companyURL" name="companyURL" required />
-                </div>
-                <br/>
-                <div className="form-control">
-                    <label htmlFor="businessOverview">Business Overview:</label><br/>
-                    <textarea id="businessOverview" name="businessOverview" rows="5" cols="140"></textarea>
-                </div>
-                <br/>
-                <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
-                <button className={classes.btn} onClick={onCancel}>Cancel</button>
-            </Form>
-            
+        <div className="form-control">
+          <label htmlFor="companyName">Select company:</label><br/>
+          <select value={selectedCompany} onChange={handleCompanyChange} id="companyName" name="companyName" required>
+            <option value="">Select Company</option>
+            {companyData.map(company => (
+                <option key={company.companyid} value={company.companyid}>{company.companyname}</option>
+            ))}
+          </select>
         </div>
+        <br/>
+        <div className="form-control">
+          <label htmlFor="positionTitle">Select position:</label><br/>
+          <select value={selectedPosition} onChange={handlePositionChange} id="positionTitle" name="positionTitle" required>
+            <option value="">Select Position</option>
+              {positions.map(position => (
+                <option key={position[0]} value={position[0]}>{position[1]}</option>
+              ))}
+          </select>
+        </div>
+        <br/>
+        <div className="form-control">
+        <label htmlFor="appStatus">Select application status:</label><br/>
+          <select value={selectedStatus} onChange={handleStatusChange} id="appStatus" name="appStatus" required>
+            <option value="">Select application status</option>
+              {status.map(element => (
+                <option key="appStatus" value={element}>{element}</option>
+              ))}
+          </select>
+        </div>
+        <br/>
+        <div className="form-control">
+        <label htmlFor="submissionDate">Submission date:</label><br/>
+        <input type="date" id="submissionDate" name="submissionDate" required />
+        </div>
+        <br/>
+        <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
+        <button className={classes.btn} onClick={onCancel}>Cancel</button>
+      </Form>
+            
+    </div>
   );
 }
 
