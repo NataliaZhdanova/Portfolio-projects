@@ -28,7 +28,8 @@ export default function ApplicationsTable({ callback, data }) {
         { 
             field: 'url', 
             headerName: 'URL', 
-            width: 160 
+            width: 200,
+            renderCell: (params) => <a href={params.row.url} target="_blank" rel="noreferrer">{params.row.url}</a> 
         },
         { 
             field: 'senddate', 

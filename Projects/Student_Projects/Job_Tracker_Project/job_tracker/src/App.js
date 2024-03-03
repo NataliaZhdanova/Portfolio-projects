@@ -8,6 +8,7 @@ import PositionsPage from './pages/PositionsPage.js';
 import ApplicationsPage from './pages/ApplicationsPage.js';
 import CompanyPage from './pages/CompanyPage.js';
 import PositionPage from './pages/PositionPage.js';
+import ApplicationPage from './pages/ApplicationPage.js';
 import { action as logout } from './pages/Logout.js';
 
 import { checkAuthLoader } from './utils/auth.js';
@@ -55,6 +56,12 @@ const router = createBrowserRouter([
     {
       path: '/applications',
       element: <ApplicationsPage />,
+      loader: checkAuthLoader,
+
+    },
+    {
+      path: '/applications/:applicationId',
+      element: <ApplicationPage />,
       loader: checkAuthLoader,
 
     },

@@ -65,7 +65,10 @@ export class Application {
 
     static fetchById(applicationid) {
         return db
-        .select("*").from("application").where("applicationid", applicationid);
+        .select("application.*", "position.title", "position.url")
+        .from("application")
+        .join("position", "application.positionid", "position.positionid")
+        .where("application.applicationid", applicationid);
     };
 
     static fetchAllForCompany(companyid) {

@@ -17,7 +17,6 @@ import ApplicationsForCompanyTable from './ApplicationsForCompanyTable.js';
 export default function PositionCard() {
   const [positionData, setPositionData] = useState([]);
   const [positionArrData, setPositionArrData] = useState([]);
-  // const [positionData, setPositionData] = useState(null);
   const [applicationData, setApplicationData] = useState([]);
 
   const [isEdited, setIsEdited] = useState(false); 
@@ -105,7 +104,7 @@ export default function PositionCard() {
       return data;
 
     } catch (error) {
-      console.error('Error updating company:', error);
+      console.error('Error updating position:', error);
     }
   };
 
