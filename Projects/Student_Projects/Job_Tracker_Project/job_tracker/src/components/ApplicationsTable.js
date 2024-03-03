@@ -1,8 +1,8 @@
 // CompaniesPage -> includes -> AllCompanies
 // AllCompanies -> is extended by -> NewCompanyCard
 // AllCompanies -> CompanyPage -> includes -> CompanyCard
-// CompanyCard -> includes -> PositionsTable
-// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> includes -> PositionsForCompanyTable
+// CompanyCard -> includes -> ApplicationsForCompanyTable
 // CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
 // CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 
@@ -12,15 +12,57 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
-const columns = [
-  { field: 'title', headerName: 'Position', width: 200, sortable: true },
-  { field: 'url', headerName: 'URL', width: 160 },
-  { field: 'senddate', headerName: 'Applied', width: 90, sortable: true },
-  { field: 'status', headerName: 'Status', width: 90, sortable: true },
-  ];
+export default function ApplicationsTable({ callback, data }) {
 
-export default function ApplicationsTable({ data }) {
+    const handleDeleteClick = (applicationid) => {
+        callback(applicationid);
+    }
+    const columns = [
+        { 
+            field: 'title', 
+            headerName: 'Position', 
+            width: 200, 
+            sortable: true,
+            renderCell: (params) => <a href={'/applications/' + params.row.applicationid}>{params.row.title}</a> 
+        },
+        { 
+            field: 'url', 
+            headerName: 'URL', 
+            width: 160 
+        },
+        { 
+            field: 'senddate', 
+            headerName: 'Applied', 
+            width: 90, 
+            sortable: true 
+        },
+        { 
+            field: 'status', 
+            headerName: 'Status', 
+            width: 90, 
+            sortable: true 
+        },
+        { 
+            field: 'delete', 
+            headerName: '', 
+            width: 100, 
+            sortable: false, 
+            renderCell: (params) => {
+                if (rowSelectionModel.length !== 0) {
+                    return <button onClick={() => handleDeleteClick(params.row.applicationid)}>Delete</button>
+                };
+            },
+        },
+        ];
+
   const rows = data;
+
+  const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
+
+    const handleRowSelectionModelChange = (newSelection) => {
+        setRowSelectionModel(newSelection);
+    }; 
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
@@ -33,6 +75,10 @@ export default function ApplicationsTable({ data }) {
           },
         }}
         pageSizeOptions={[5, 10]}
+        checkboxSelection
+        disableRowSelectionOnClick
+        rowSelectionModel={rowSelectionModel}
+        onRowSelectionModelChange={handleRowSelectionModelChange}
       />
     </div>
   );

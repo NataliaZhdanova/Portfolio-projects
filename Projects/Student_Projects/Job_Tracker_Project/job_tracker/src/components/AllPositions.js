@@ -1,4 +1,5 @@
 // PositionsPage -> includes -> AllPositions
+// AllPositions -> includes -> PositionsTable
 // AllPositions -> is extended by -> NewPositionCard
 // AllPositions -> PositionPage -> includes -> PositionCard
 // PositionCard -> includes -> ApplicationsTable
@@ -9,6 +10,7 @@ import { useState, useEffect, useRef } from "react";
 
 import classes from "./AllPositions.module.css";
 import NewPositionForm from './NewPositionCard';
+import PositionsTable from './PositionsTable';
 
 import { getAuthToken } from '../utils/auth.js';
 import { getUserId } from '../utils/userId.js';
@@ -110,46 +112,19 @@ export default function AllPositions() {
     }
   };
 
-// Handlers for adding and deleting positions
+// Handlers for adding and deleting positions 
 
   const handleAddPositionClick = () => {
     setIsAddingPosition(true);
   };
 
-  const handleDeleteClick = (positionid) => {
-    deletePosition(positionid);
-  }
-  
-    return (
+  return (
       <div className={classes.positions}>
         <h1>Positions</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Company Name</th>
-              <th>Position Title</th>
-              <th>Position URL</th>
-              <th>Requirements</th>
-              <th>Keywords</th>
-              <th>Discovery Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {positionData.map((position) => (
-              <tr key={position.positionid}>
-                <td>{position.companyname}</td>
-                <td><a href={`/positions/${position.positionid}`}>{position.title}</a></td>
-                <td><a href={`${position.url}`}>{position.url}</a></td>
-                <td>{position.requirements}</td>
-                <td>{position.keywords}</td>
-                <td>{position.discoverydate}</td>
-                <td>
-                  <button onClick={() => handleDeleteClick(position.positionid)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className={classes.tablepositions}>
+          <PositionsTable callback={deletePosition} data={positionData} />    
+          <br/>          
+        </div>
         <br></br>
         <div>
         <br></br>      

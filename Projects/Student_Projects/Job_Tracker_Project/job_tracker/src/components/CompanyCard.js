@@ -1,8 +1,8 @@
 // CompaniesPage -> includes -> AllCompanies
 // AllCompanies -> is extended by -> NewCompanyCard
 // AllCompanies -> CompanyPage -> includes -> CompanyCard
-// CompanyCard -> includes -> PositionsTable
-// CompanyCard -> includes -> ApplicationsTable
+// CompanyCard -> includes -> PositionsForCompanyTable
+// CompanyCard -> includes -> ApplicationsForCompanyTable
 // CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
 // CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 
@@ -15,8 +15,8 @@ import { getAuthToken } from '../utils/auth.js';
 
 import ModalAddPosition from './ModalAddPosition.js';
 import ModalAddApplication from './ModalAddApplication.js';
-import PositionsTable from './PositionsTable.js';
-import ApplicationsTable from './ApplicationsTable.js';
+import PositionsForCompanyTable from './PositionsForCompanyTable.js';
+import ApplicationsForCompanyTable from './ApplicationsForCompanyTable.js';
 
 export default function CompanyCard() {
   const [companyData, setCompanyData] = useState([]);
@@ -280,7 +280,7 @@ export default function CompanyCard() {
         {positionData.length > 0 ? (
           <div className={classes.tablepositions}>
             <h2>Positions</h2>
-            <PositionsTable data={positionData} />    
+            <PositionsForCompanyTable data={positionData} />    
             <br/>          
           </div>
         ) : (
@@ -300,7 +300,7 @@ export default function CompanyCard() {
         {applicationData.length > 0 ? (
           <div className={classes.tableapplications}>
             <h2>Applications</h2>
-            <ApplicationsTable data={applicationData} />    
+            <ApplicationsForCompanyTable data={applicationData} />    
             <br/>          
           </div>
         ) : (

@@ -1,7 +1,7 @@
 // PositionsPage -> includes -> AllPositions
 // AllPositions -> is extended by -> NewPositionCard
 // AllPositions -> PositionPage -> includes -> PositionCard
-// PositionCard -> includes -> ApplicationsTable
+// PositionCard -> includes -> ApplicationsForCompanyTable
 // PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 
 import { Form } from 'react-router-dom';
@@ -12,7 +12,7 @@ import classes from "./PositionCard.module.css";
 import { getAuthToken } from '../utils/auth.js';
 
 import ModalAddApplication from './ModalAddApplication.js';
-import ApplicationsTable from './ApplicationsTable.js';
+import ApplicationsForCompanyTable from './ApplicationsForCompanyTable.js';
 
 export default function PositionCard() {
   const [positionData, setPositionData] = useState([]);
@@ -235,7 +235,7 @@ export default function PositionCard() {
           {applicationData.length > 0 ? (
             <div className={classes.tableapplications}>
               <h2>Applications</h2>
-              <ApplicationsTable data={applicationData} />    
+              <ApplicationsForCompanyTable data={applicationData} />    
               <br/>          
             </div>
           ) : (

@@ -1,16 +1,19 @@
 // CompaniesPage -> includes -> AllCompanies
 // AllCompanies -> is extended by -> NewCompanyCard
+// Allcompanies -> includes -> CompaniesTable
 // AllCompanies -> CompanyPage -> includes -> CompanyCard
 // CompanyCard -> includes -> PositionsTable
 // CompanyCard -> includes -> ApplicationsTable
 // CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
 // CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+// 
 
 import * as React from 'react';
 import { useState, useEffect, useRef } from "react";
 
 import classes from "./AllCompanies.module.css";
 import NewCompanyForm from './NewCompanyCard';
+import CompaniesTable from './CompaniesTable';
 
 import { getAuthToken } from '../utils/auth.js';
 import { getUserId } from '../utils/userId.js'; 
@@ -97,34 +100,14 @@ export default function AllCompanies() {
     setIsAddingCompany(true);
   };
 
-  const handleDeleteClick = (companyid) => {
-    deleteCompany(companyid);
-  }
-    
+   
   return (
       <div className={classes.companies}>
         <h1>Companies</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Company Name</th>
-              <th>Company URL</th>
-              <th>Business Overview</th>
-            </tr>
-          </thead>
-          <tbody>
-            {companyData.map((company) => (
-              <tr key={company.companyid}>
-                <td><a href={`/companies/${company.companyid}`}>{company.companyname}</a></td>
-                <td><a href={`${company.url}`}>{company.url}</a></td>
-                <td>{company.businessoverview}</td>
-                <td>
-                    <button onClick={() => handleDeleteClick(company.companyid)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className={classes.tablecompanies}>
+            <CompaniesTable callback={deleteCompany} data={companyData} />    
+            <br/>          
+        </div>
         <br></br>
         <div>
           <br></br>      

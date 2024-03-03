@@ -1,4 +1,5 @@
 // ApplicationsPage -> includes -> AllApplications
+//
 // AllApplications -> is extended by -> NewApplicationCard
 // AllApplications -> ApplicationPage -> includes -> ApplicationCard
 
@@ -7,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 
 import classes from "./AllApplications.module.css";
 import NewApplicationForm from './NewApplicationCard';
+import ApplicationsTable from './ApplicationsTable';
 
 import { getAuthToken } from '../utils/auth.js';
 import { getUserId } from '../utils/userId.js';
@@ -114,37 +116,13 @@ const handleAddApplicationClick = () => {
   setIsAddingApplication(true);
 };
 
-const handleDeleteClick = (applicationid) => {
-  deleteApplication(applicationid);
-}
 return (
   <div className={classes.applications}>
     <h1>Applications</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Company Name</th>
-          <th>Position Title</th>
-          <th>Position URL</th>
-          <th>Application Status</th>
-          <th>Send Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {applicationData.map((application) => (
-          <tr key={application.applicationid}>
-            <td>{application.companyname}</td>
-            <td><a href={`/applications/${application.applicationid}`}>{application.title}</a></td>
-            <td><a href={`${application.url}`}>{application.url}</a></td>
-            <td>{application.status}</td>
-            <td>{application.senddate}</td>
-            <td>
-              <button onClick={() => handleDeleteClick(application.applicationid)}>Delete</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className={classes.tableapplications}>
+      <ApplicationsTable callback={deleteApplication} data={applicationData} />    
+      <br/>          
+    </div>
     <br></br>
     <div>
     <br></br>      
