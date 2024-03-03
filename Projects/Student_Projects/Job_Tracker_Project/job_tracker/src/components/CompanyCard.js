@@ -47,6 +47,7 @@ export default function CompanyCard() {
       }); 
       const data = await response.json();
       setCompanyData(data[0]);
+      console.log(companyData);
       return data;
 
     } catch (error) {
@@ -73,7 +74,7 @@ export default function CompanyCard() {
     }
   };  
 
-// Fetch application data from the server
+// Fetch application data from the server 
 
   const fetchApplications = async () => {
     try {

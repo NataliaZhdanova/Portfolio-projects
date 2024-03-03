@@ -31,7 +31,7 @@ const ModalAddPosition = ({ callback, data, onClose }) => {
     return (
         <div className={classes.modal}>
         <div className={classes.addnewform}>
-        <h1>Add new Position</h1>
+        <h1 className={classes.modalheader}>Add new Position</h1>
             <Form id="newPositionForm" className={classes.form}>
             
                 <div className="form-control">
@@ -56,10 +56,14 @@ const ModalAddPosition = ({ callback, data, onClose }) => {
                 <br/>
                 <div className="form-control">
                     <label htmlFor="discoveryDate">Discovery Date:</label><br/>
-                    <input type="text" id="discoveryDate" name="discoveryDate" required /><br/><br/>
+                    <input type="date" id="discoveryDate" name="discoveryDate" required /><br/><br/>
                 </div>
-                <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
-                <button className={classes.btn} onClick={onClose}>Cancel</button>
+                <br/>
+                <div className={classes.buttons}>
+                    <button className={classes.btncancel} onClick={onClose}>CANCEL</button>
+                    <button className={classes.btnsave} type="submit" onClick={handleSubmit}>SAVE</button>
+                </div>       
+                
             </Form>
             
         </div>

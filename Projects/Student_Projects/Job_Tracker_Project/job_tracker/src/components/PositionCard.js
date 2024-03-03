@@ -16,6 +16,8 @@ import ApplicationsTable from './ApplicationsTable.js';
 
 export default function PositionCard() {
   const [positionData, setPositionData] = useState([]);
+  const [positionArrData, setPositionArrData] = useState([]);
+  // const [positionData, setPositionData] = useState(null);
   const [applicationData, setApplicationData] = useState([]);
 
   const [isEdited, setIsEdited] = useState(false); 
@@ -41,6 +43,7 @@ export default function PositionCard() {
       }); 
       const data = await response.json();
       setPositionData(data[0]);
+      setPositionArrData(data);
       return data;
 
     } catch (error) {
@@ -165,6 +168,7 @@ export default function PositionCard() {
 
   const openModalApplication = () => {
     setIsModalApplicationOpen(true);
+    console.log(positionData);
   };
 
   const closeModalApplication = () => {
@@ -240,7 +244,7 @@ export default function PositionCard() {
               <p>You don't have any applications for this company. But you could create the first one!</p>
               <br/>
               <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
-              {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionData} onClose={closeModalApplication} />}
+              {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionArrData} onClose={closeModalApplication} />}
             <br/>
             </div>
           )} 

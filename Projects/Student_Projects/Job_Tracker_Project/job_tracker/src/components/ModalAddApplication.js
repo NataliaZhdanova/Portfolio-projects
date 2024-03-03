@@ -35,7 +35,8 @@ const ModalAddApplication = ({ callback, positiondata, onClose }) => {
          
     };
 
-    // Handle position selection change
+    // Handle position selection change 
+
     const handlePositionChange = (event) => {
         setSelectedPosition(event.target.value);
     };
