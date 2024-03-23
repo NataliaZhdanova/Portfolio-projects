@@ -1,15 +1,15 @@
 .applicationpage {
-    background-color:white;
-    border-radius: 8px;
-    margin-top: 20px;
-    padding: 20px;
-    width: 100%;
+  background-color:white;
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 20px;
+  font-family: 'Calibri', sans-serif;
 }
 
-.applicationheader {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+.applicationpageheader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .applicationh1 {
@@ -39,17 +39,35 @@
   
   .form label,
   .form input,
-  .form textarea {
+  .form textarea,
+  .form select {
     display: block;
-    width: 100%;
+    width: 1360px;
     font-weight: 700;
+    font-size: 20px;
   }
   
   .form input,
-  .form textarea {
+  .form textarea,
+  .form select {
     font: inherit;
-    padding: 0.25rem;
-    border: 2px solid #008080;
+    padding: 0.8rem;
+    border: 1.5px solid rgb(219, 219, 219);
+    border-radius: 4px;
+    font-size: 18px;
+    box-sizing: border-box;
+  }
+
+  .notedited {
+    background-color: rgb(245, 245, 245);
+  }
+
+  .formedited {
+    background-color: white;
+  }
+
+  .tableheader {
+    color: teal
   }
   
   
@@ -62,7 +80,10 @@
     color: white;
     border: 2px solid teal;
     font-weight: 700;
+    font-size: 18px;
     margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
   

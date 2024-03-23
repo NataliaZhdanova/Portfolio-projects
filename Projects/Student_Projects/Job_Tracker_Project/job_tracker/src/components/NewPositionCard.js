@@ -2,7 +2,7 @@
 // AllPositions -> is extended by -> NewPositionCard
 // AllPositions -> PositionPage -> includes -> PositionCard
 // PositionCard -> includes -> ApplicationsTable
-// PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+// PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard) 
 
 import { Form, useSubmit } from 'react-router-dom'
 import { useState } from "react";
@@ -47,8 +47,8 @@ function NewPositionForm({ companyData, callback, onCancel }) {
       <h1>Add new Position</h1>
       <Form id="newPositionForm" className={classes.form}>
             
-        <div className="form-control">
-          <label htmlFor="companyName">Select Company:</label><br/>
+        <div>
+          <label htmlFor="companyName">Select Company</label><br/>
           <select value={selectedCompany} onChange={handleCompanyChange} id="companyName" name="companyName" required>
           <option value="">Select company</option>
             {data.map((company) => (
@@ -57,32 +57,35 @@ function NewPositionForm({ companyData, callback, onCancel }) {
           </select>
         </div>
         <br/>
-        <div className="form-control">
-          <label htmlFor="positionTitle">Position Title:</label><br/>
+        <div>
+          <label htmlFor="positionTitle">Position Title</label><br/>
           <input type="text" id="positionTitle" name="positionTitle" required />
         </div>
         <br/>
-        <div className="form-control">
-          <label htmlFor="positionURL">Position URL:</label><br/>
+        <div>
+          <label htmlFor="positionURL">Position URL</label><br/>
           <input type="text" id="positionURL" name="positionURL" required />
         </div>
         <br/>
-        <div className="form-control">
-          <label htmlFor="requirements">Requirements:</label><br/>
+        <div>
+          <label htmlFor="requirements">Requirements</label><br/>
           <textarea id="requirements" name="requirements" rows="5" cols="140"></textarea>
         </div>
         <br/>
-        <div className="form-control">
-          <label htmlFor="keywords">Keywords:</label><br/>
+        <div>
+          <label htmlFor="keywords">Keywords</label><br/>
           <textarea id="keywords" name="keywords" rows="5" cols="140"></textarea>
         </div>
         <br/>
-        <div className="form-control">
-          <label htmlFor="discoveryDate">Discovery Date:</label><br/>
-          <input type="date" id="discoveryDate" name="discoveryDate" required /><br/><br/>
+        <div>
+          <label htmlFor="discoveryDate">Discovery Date</label><br/>
+          <input type="date" id="discoveryDate" name="discoveryDate" required />
         </div>
-        <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
+        <br/>
+        <div className={classes.buttons}>
         <button className={classes.btn} onClick={onCancel}>Cancel</button>
+        <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
+        </div>
       </Form>
             
     </div>

@@ -4,7 +4,7 @@
 // CompanyCard -> includes -> PositionsTable
 // CompanyCard -> includes -> ApplicationsTable
 // CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
-// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
+// CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard) 
 
 import { Form, useSubmit } from 'react-router-dom';
 import classes from "./NewCompanyForm.module.css";
@@ -38,23 +38,25 @@ function NewCompanyForm({ callback, onCancel }) {
         <h1>Add new Company</h1>
             <Form id="newCompanyForm" className={classes.form}>
             
-                <div className="form-control">
-                    <label htmlFor="companyName">Company Name:</label><br/>
+                <div>
+                    <label htmlFor="companyName">Company Name</label><br/>
                     <input type="text" id="companyName" name="companyName" required />
                 </div>
                 <br/>
-                <div className="form-control">
-                    <label htmlFor="companyURL">Company URL:</label><br/>
+                <div>
+                    <label htmlFor="companyURL">Company URL</label><br/>
                     <input type="text" id="companyURL" name="companyURL" required />
                 </div>
                 <br/>
-                <div className="form-control">
-                    <label htmlFor="businessOverview">Business Overview:</label><br/>
+                <div>
+                    <label htmlFor="businessOverview">Business Overview</label><br/>
                     <textarea id="businessOverview" name="businessOverview" rows="5" cols="140"></textarea>
                 </div>
                 <br/>
-                <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
+                <div className={classes.buttons}>      
                 <button className={classes.btn} onClick={onCancel}>Cancel</button>
+                <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
+                </div>
             </Form>
             
         </div>

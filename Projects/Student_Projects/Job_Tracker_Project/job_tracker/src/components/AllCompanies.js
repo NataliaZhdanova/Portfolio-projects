@@ -4,7 +4,7 @@
 // AllCompanies -> CompanyPage -> includes -> CompanyCard
 // CompanyCard -> includes -> PositionsTable
 // CompanyCard -> includes -> ApplicationsTable
-// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard)
+// CompanyCard -> is extended by -> ModalAddPosition (similar to NewPositionCard) 
 // CompanyCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 // 
 
@@ -108,14 +108,16 @@ export default function AllCompanies() {
             <CompaniesTable callback={deleteCompany} data={companyData} />    
             <br/>          
         </div>
-        <br></br>
         <div>
-          <br></br>      
           <button className={classes.btn} type="button" id="addNewCompany" onClick={handleAddCompanyClick}>Add Company</button>
+        </div> 
+         
           {isAddingCompany && (
+          <div className={classes.addcompany}>
           <NewCompanyForm callback={addCompany} onCancel={() => setIsAddingCompany(false)} />
+          </div>
           )}
-        </div>
+        
       </div>
             
     );

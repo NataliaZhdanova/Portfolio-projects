@@ -1,7 +1,7 @@
 // ApplicationsPage -> includes -> AllApplications
-//
+// AllApplications -> includes -> ApplicationsTable
 // AllApplications -> is extended by -> NewApplicationCard
-// AllApplications -> ApplicationPage -> includes -> ApplicationCard
+// AllApplications -> ApplicationPage -> includes -> ApplicationCard 
 
 import * as React from 'react';
 import { useState, useEffect, useRef } from "react";
@@ -123,17 +123,16 @@ return (
       <ApplicationsTable callback={deleteApplication} data={applicationData} />    
       <br/>          
     </div>
-    <br></br>
     <div>
-    <br></br>      
       <button className={classes.btn} type="button" id="addNewApplication" onClick={handleAddApplicationClick}>Add Application</button>
+      </div> 
           {isAddingApplication && (
-          <NewApplicationForm positionData={positionData} callback={addApplication} onCancel={() => setIsAddingApplication(false)} />
+            <div className={classes.addapplication}>
+            <NewApplicationForm positionData={positionData} callback={addApplication} onCancel={() => setIsAddingApplication(false)} />
+            </div>
         )}
       </div>
-      </div>
-      
-      
+    
     );
   };
     

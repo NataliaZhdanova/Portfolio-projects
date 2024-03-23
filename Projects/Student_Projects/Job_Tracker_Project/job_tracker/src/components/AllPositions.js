@@ -2,7 +2,7 @@
 // AllPositions -> includes -> PositionsTable
 // AllPositions -> is extended by -> NewPositionCard
 // AllPositions -> PositionPage -> includes -> PositionCard
-// PositionCard -> includes -> ApplicationsTable
+// PositionCard -> includes -> ApplicationsTable 
 // PositionCard -> is extended by -> ModalAddApplication (similar to NewApplicationCard)
 
 import * as React from 'react';
@@ -125,17 +125,16 @@ export default function AllPositions() {
           <PositionsTable callback={deletePosition} data={positionData} />    
           <br/>          
         </div>
-        <br></br>
         <div>
-        <br></br>      
         <button className={classes.btn} type="button" id="addNewPosition" onClick={handleAddPositionClick}>Add Position</button>
+        </div> 
           {isAddingPosition && (
-          <NewPositionForm companyData={companyData} callback={addPosition} onCancel={() => setIsAddingPosition(false)} />
+            <div className={classes.addposition}>
+            <NewPositionForm companyData={companyData} callback={addPosition} onCancel={() => setIsAddingPosition(false)} />
+            </div>
           )}
       </div>
-      </div>
-      
-      
+     
     );
   };
     

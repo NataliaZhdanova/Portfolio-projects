@@ -1,9 +1,10 @@
 .header {
     max-width: 60rem;
     margin: auto;
-    padding: 2rem;
     display: flex;
     justify-content: space-between;
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
   }
   
   .list {
@@ -23,3 +24,17 @@
   .list a.active {
     color: var(--color-primary-800);
   }
+
+  .logoutbtn {
+    background-color: teal;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-family: 'Calibri', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    } 
+
+  .logoutbtn:hover {
+    color: var(--color-primary-800);
+  } 

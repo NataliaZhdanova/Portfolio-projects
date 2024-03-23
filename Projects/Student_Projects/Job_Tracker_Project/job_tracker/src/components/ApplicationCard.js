@@ -10,7 +10,6 @@ import classes from "./ApplicationCard.module.css";
 import { getAuthToken } from '../utils/auth.js';
 
 export default function ApplicationCard() {
-  const [applicationArrData, setApplicationArrData] = useState([]);
   const [applicationData, setApplicationData] = useState([]);
 
   const [isEdited, setIsEdited] = useState(false); 
@@ -19,7 +18,7 @@ export default function ApplicationCard() {
   const token = getAuthToken();
   const applicationId = window.location.pathname.split("/").pop();
 
-// Fetch position data from the server
+// Fetch application data from the server
 
   const fetchData = async () => {
     try {      
@@ -31,7 +30,6 @@ export default function ApplicationCard() {
       }); 
       const data = await response.json();
       setApplicationData(data[0]);
-      setApplicationArrData(data);
       return data;
 
     } catch (error) {
@@ -110,7 +108,7 @@ export default function ApplicationCard() {
 
   return (
     <div className={classes.applicationpage}>
-      <div className={classes.applicationheader}>
+      <div className={classes.applicationpageheader}>
         <h1 className={classes.applicationh1}>Application Card</h1>
         {isEdited === false ? (
           <button className={classes.editbutton} onClick={handleEditClick}>
@@ -125,22 +123,22 @@ export default function ApplicationCard() {
       <div className={classes.applicationdata}>
         <Form id="companyForm" className={classes.form}>
                 
-          <div className="form-control">
-            <label htmlFor="positionTitle">Position Title:</label><br/>
-              <input type="text" id="positionTitle" name="positionTitle" value={applicationData.title} />
+          <div>
+            <label htmlFor="positionTitle">Position Title</label><br/>
+              <input type="text" className={classes.notedited} id="positionTitle" name="positionTitle" value={applicationData.title} />
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="positionURL">Position URL:</label><br/>
-              <input type="text" id="positionURL" name="positionURL" value={applicationData.url} />                         
+          <div>
+            <label htmlFor="positionURL">Position URL</label><br/>
+              <input type="text" className={classes.notedited} id="positionURL" name="positionURL" value={applicationData.url} />                         
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="requirements">Application Status:</label><br/>
+          <div>
+            <label htmlFor="requirements">Application Status</label><br/>
             {isEdited === false ? (
-              <input type="text" id="appStatus" name="appStatus" value={applicationData.status} />
+              <input type="text" className={classes.notedited} id="appStatus" name="appStatus" value={applicationData.status} />
             ) : (
-                <select value={editedStatus} onChange={handleStatusChange} id="appStatus" name="appStatus" required>
+                <select value={editedStatus} onChange={handleStatusChange} className={classes.formedited} id="appStatus" name="appStatus" required>
                 <option value="">Select application status</option>
                   {status.map(element => (
                     <option key="appStatus" value={element}>{element}</option>
@@ -149,16 +147,13 @@ export default function ApplicationCard() {
             )}              
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="submissionDate">Submission Date:</label><br/>
-            <input type="text" id="submissionDate" name="submissionDate" value={applicationData.senddate} />
+          <div>
+            <label htmlFor="submissionDate">Submission Date</label><br/>
+            <input type="text" className={classes.notedited} id="submissionDate" name="submissionDate" value={applicationData.senddate} />
        
-          </div>
-                    
+          </div>       
         </Form>
-        <br/>
       </div>
-      <br/>
       <div className={classes.cardButtons}>
         {isEdited === false ? (
           <button className={classes.btn} onClick={() => window.location.replace('/applications')}>Back</button>

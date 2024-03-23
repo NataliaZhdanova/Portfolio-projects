@@ -176,7 +176,7 @@ export default function PositionCard() {
 
   return (
     <div className={classes.positionpage}>
-      <div className={classes.positionheader}>
+      <div className={classes.positionpageheader}>
         <h1 className={classes.positionh1}>Position Card</h1>
         {isEdited === false ? (
           <button className={classes.editbutton} onClick={handleEditClick}>
@@ -191,65 +191,43 @@ export default function PositionCard() {
       <div className={classes.positiondata}>
         <Form id="companyForm" className={classes.form}>
                 
-          <div className="form-control">
-            <label htmlFor="positionTitle">Position Title:</label><br/>
+          <div>
+            <label htmlFor="positionTitle">Position Title</label><br/>
             {isEdited === false ? (
-              <input type="text" id="positionTitle" name="positionTitle" value={positionData.title} />
+              <input type="text" className={classes.notedited} id="positionTitle" name="positionTitle" value={positionData.title} />
             ) : (
-              <input type="text" id="positionTitle" name="positionTitle" value={editedPositionTitle} onChange={(e) => setEditedPositionTitle(e.target.value)} />
+              <input type="text" className={classes.formedited} id="positionTitle" name="positionTitle" value={editedPositionTitle} onChange={(e) => setEditedPositionTitle(e.target.value)} />
             )}
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="positionURL">Position URL:</label><br/>
+          <div>
+            <label htmlFor="positionURL">Position URL</label><br/>
             {isEdited === false ? (
-              <input type="text" id="positionURL" name="positionURL" value={positionData.url} />
+              <input type="text" className={classes.notedited} id="positionURL" name="positionURL" value={positionData.url} />
             ) : (
-              <input type="text" id="positionURL" name="positionURL" value={editedPositionUrl} onChange={(e) => setEditedPositionUrl(e.target.value)} />
+              <input type="text" className={classes.formedited} id="positionURL" name="positionURL" value={editedPositionUrl} onChange={(e) => setEditedPositionUrl(e.target.value)} />
             )}              
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="requirements">Requirements:</label><br/>
+          <div>
+            <label htmlFor="requirements">Requirements</label><br/>
             {isEdited === false ? (
-              <textarea id="requirements" name="requirements" rows="5" cols="140" value={positionData.requirements} ></textarea>
+              <textarea className={classes.notedited} id="requirements" name="requirements" rows="5" cols="140" value={positionData.requirements} ></textarea>
             ) : (
-              <textarea id="requirements" name="requirements" rows="5" cols="140" value={editedRequirements} onChange={(e) => setEditedRequirements(e.target.value)} ></textarea>
+              <textarea className={classes.formedited} id="requirements" name="requirements" rows="5" cols="140" value={editedRequirements} onChange={(e) => setEditedRequirements(e.target.value)} ></textarea>
             )}              
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="keywords">Keywords:</label><br/>
+          <div>
+            <label htmlFor="keywords">Keywords</label><br/>
             {isEdited === false ? (
-              <textarea id="keywords" name="keywords" rows="5" cols="140" value={positionData.keywords} ></textarea>
+              <textarea className={classes.notedited} id="keywords" name="keywords" rows="5" cols="140" value={positionData.keywords} ></textarea>
             ) : (
-              <textarea id="keywords" name="keywords" rows="5" cols="140" value={editedKeywords} onChange={(e) => setEditedKeywords(e.target.value)} ></textarea>
+              <textarea className={classes.formedited} id="keywords" name="keywords" rows="5" cols="140" value={editedKeywords} onChange={(e) => setEditedKeywords(e.target.value)} ></textarea>
             )}              
-          </div>
-                    
+          </div>                    
         </Form>
-        <br/>
       </div>
-      <div>
-          {applicationData.length > 0 ? (
-            <div className={classes.tableapplications}>
-              <h2>Applications</h2>
-              <ApplicationsForCompanyTable data={applicationData} />    
-              <br/>          
-            </div>
-          ) : (
-            <div className={classes.tableapplications}>
-              <h2>Applications</h2>
-              <p>You don't have any applications for this company. But you could create the first one!</p>
-              <br/>
-              <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
-              {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionArrData} onClose={closeModalApplication} />}
-            <br/>
-            </div>
-          )} 
-        
-      </div>
-      <br/>
       <div className={classes.cardButtons}>
         {isEdited === false ? (
           <button className={classes.btn} onClick={() => window.location.replace('/positions')}>Back</button>
@@ -261,6 +239,28 @@ export default function PositionCard() {
           </>
         )}
       </div>
+      <br/>
+      <div>
+          {applicationData.length > 0 ? (
+            <div className={classes.tableapplications}>
+              <h2 className={classes.tableheader}>Applications</h2>
+              <ApplicationsForCompanyTable data={applicationData} />    
+              <br/>          
+            </div>
+          ) : (
+            <div className={classes.tableapplications}>
+              <h2 className={classes.tableheader}>Applications</h2>
+              <p>You haven't applied for any positions in this company.</p>
+              <br/>
+              <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
+              {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionArrData} onClose={closeModalApplication} />}
+            <br/>
+            </div>
+          )} 
+        
+      </div>
+      <br/>
+      
     </div>
   );
 }

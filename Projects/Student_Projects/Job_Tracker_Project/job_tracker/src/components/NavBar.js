@@ -54,7 +54,7 @@ function NavBar() {
               method="post"
               className={classes.logout}              
             >
-              <button>Logout</button>
+              <button className={classes.logoutbtn}>Logout</button>
             </Form>
           </li>
           

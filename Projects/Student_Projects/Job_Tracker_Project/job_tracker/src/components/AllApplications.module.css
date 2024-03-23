@@ -1,6 +1,6 @@
 body {
     background-color: teal;
-    font-family: Arial, sans-serif;
+    font-family: 'Calibri', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,6 +16,7 @@ body {
     flex-wrap: wrap;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Calibri', sans-serif;
 }
 
 h1 {
@@ -49,8 +50,10 @@ td {
     color: white;
     border: 2px solid teal;
     font-weight: 700;
-    width: 150px;
-    margin-left: 20px;
+    font-size: 18px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 
   }
   
@@ -62,3 +65,9 @@ td {
     border-radius: 4px;
   } 
   
+  .addapplication {
+    background-color:rgb(246, 246, 246);
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+  }

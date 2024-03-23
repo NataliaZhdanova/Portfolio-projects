@@ -4,6 +4,7 @@
     margin-top: 20px;
     padding: 20px;
     width: 100%;
+    font-family: 'Calibri', sans-serif;
 }
 
 .companypageheader {
@@ -43,13 +44,28 @@
     display: block;
     width: 100%;
     font-weight: 700;
+    font-size: 20px;
   }
   
   .form input,
   .form textarea {
     font: inherit;
-    padding: 0.25rem;
-    border: 2px solid #008080;
+    padding: 0.8rem;
+    border: 1.5px solid rgb(219, 219, 219);
+    border-radius: 4px;
+    font-size: 18px;
+  }
+
+  .notedited {
+    background-color: rgb(245, 245, 245);
+  }
+
+  .formedited {
+    background-color: white;
+  }
+
+  .tableheader {
+    color: teal
   }
   
   
@@ -62,7 +78,10 @@
     color: white;
     border: 2px solid teal;
     font-weight: 700;
+    font-size: 18px;
     margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
   

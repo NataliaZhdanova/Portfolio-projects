@@ -246,88 +246,95 @@ export default function CompanyCard() {
       <div className={classes.companydata}>
         <Form id="companyForm" className={classes.form}>
                 
-          <div className="form-control">
-            <label htmlFor="companyName">Company Name:</label><br/>
+          <div>
+            <label htmlFor="companyName">Company Name</label><br/>
             {isEdited === false ? (
-              <input type="text" id="companyName" name="companyName" value={companyData.companyname} />
+              <input type="text" className={classes.notedited} id="companyName" name="companyName" value={companyData.companyname} />
             ) : (
-              <input type="text" id="companyName" name="companyName" value={editedCompanyName} onChange={(e) => setEditedCompanyName(e.target.value)} />
+              <input type="text" className={classes.formedited} id="companyName" name="companyName" value={editedCompanyName} onChange={(e) => setEditedCompanyName(e.target.value)} />
             )}
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="companyURL">Company URL:</label><br/>
+          <div>
+            <label htmlFor="companyURL">Company URL</label><br/>
             {isEdited === false ? (
-              <input type="text" id="companyURL" name="companyURL" value={companyData.url} />
+              <input type="text" className={classes.notedited} id="companyURL" name="companyURL" value={companyData.url} />
             ) : (
-              <input type="text" id="companyURL" name="companyURL" value={editedUrl} onChange={(e) => setEditedUrl(e.target.value)} />
+              <input type="text" className={classes.formedited} id="companyURL" name="companyURL" value={editedUrl} onChange={(e) => setEditedUrl(e.target.value)} />
             )}              
           </div>
           <br/>
-          <div className="form-control">
-            <label htmlFor="businessOverview">Business Overview:</label><br/>
+          <div>
+            <label htmlFor="businessOverview">Business Overview</label><br/>
             {isEdited === false ? (
-              <textarea id="businessOverview" name="businessOverview" rows="5" cols="140" value={companyData.businessoverview} ></textarea>
+              <textarea className={classes.notedited} id="businessOverview" name="businessOverview" rows="5" cols="140" value={companyData.businessoverview} ></textarea>
             ) : (
-              <textarea id="businessOverview" name="businessOverview" rows="5" cols="140" value={editedBusinessOverview} onChange={(e) => setEditedBusinessOverview(e.target.value)} ></textarea>
+              <textarea className={classes.formedited} id="businessOverview" name="businessOverview" rows="5" cols="140" value={editedBusinessOverview} onChange={(e) => setEditedBusinessOverview(e.target.value)} ></textarea>
             )}              
-          </div>
-                    
+          </div>                    
         </Form>
-        <br/>
       </div>
+      <div className={classes.cardButtons}>
+        {isEdited === false ? (
+          <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Back</button>
+        ) : (
+          <>
+            <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
+            <button className={classes.btn} type="submit" onClick={handleSubmitClose}>Save & Close</button>
+            <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Close without saving</button>
+          </>
+        )}
+      </div>
+      <br/>
       <div>
         {positionData.length > 0 ? (
+          <>
           <div className={classes.tablepositions}>
-            <h2>Positions</h2>
+            <h2 className={classes.tableheader}>Positions</h2>
             <PositionsForCompanyTable data={positionData} />    
             <br/>          
           </div>
-        ) : (
-          <div className={classes.tablepositions}>
-            <h2>Positions</h2>
-            <p>You don't have any positions for this company. But you could create the first one!</p>
-            <br/>
-          </div>
-        )}
           <div>
             <button className={classes.btn} onClick={openModalPosition}>Add new position</button>
             {isModalPositionOpen && <ModalAddPosition callback={addPosition} data={companyData} onClose={closeModalPosition} />}
             <br/>
           </div>
-      </div>
-      <div>
-        {applicationData.length > 0 ? (
-          <div className={classes.tableapplications}>
-            <h2>Applications</h2>
-            <ApplicationsForCompanyTable data={applicationData} />    
-            <br/>          
-          </div>
-        ) : (
-          <div className={classes.tableapplications}>
-            <h2>Applications</h2>
-            <p>You don't have any applications for this company. But you could create the first one!</p>
+          <div>
+          {applicationData.length > 0 ? (
+            <div className={classes.tableapplications}>
+              <h2 className={classes.tableheader}>Applications</h2>
+              <ApplicationsForCompanyTable data={applicationData} />    
+              <br/>          
+            </div>
+          ) : (
+            <div className={classes.tableapplications}>
+              <h2 className={classes.tableheader}>Applications</h2>
+              <p>You haven't applied for any positions in this company.</p>
+              <br/>
+            </div>
+          )}
+          <div>
+            <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
+              {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionData} onClose={closeModalApplication} />}
             <br/>
           </div>
-        )}
-        <div>
-          <button className={classes.btn} onClick={openModalApplication}>Add new application</button>
-            {isModalApplicationOpen && <ModalAddApplication callback={addApplication} positiondata={positionData} onClose={closeModalApplication} />}
-          <br/>
-        </div>
+          </div>
+          </>
+        ) : (
+          <>
+          <div className={classes.tablepositions}>
+            <h2 className={classes.tableheader}>Positions</h2>
+            <p>You don't have any positions for this company. But you could create the first one!</p>
+            <br/>
+          </div>
+          <div>
+            <button className={classes.btn} onClick={openModalPosition}>Add new position</button>
+            {isModalPositionOpen && <ModalAddPosition callback={addPosition} data={companyData} onClose={closeModalPosition} />}
+            <br/>
+          </div>
+          </>
+        )}          
       </div>
-    <br/>
-    <div className={classes.cardButtons}>
-      {isEdited === false ? (
-        <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Back</button>
-      ) : (
-        <>
-          <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
-          <button className={classes.btn} type="submit" onClick={handleSubmitClose}>Save & Close</button>
-          <button className={classes.btn} onClick={() => window.location.replace('/companies')}>Close without saving</button>
-        </>
-      )}
-    </div>
     </div>
   );
 }

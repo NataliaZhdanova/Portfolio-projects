@@ -1,14 +1,11 @@
 .form {
-    max-width: 40rem;
-    margin-left: 20px;
-    width: 600px;
-
+    margin-right: 20px;
   }
 
 .addnewform {
-    background-color:white;
     border-radius: 8px;
     margin-top: 20px;
+    font-family: 'Calibri', sans-serif;
 }
   
   .form label,
@@ -18,23 +15,27 @@
     display: block;
     width: 100%;
     font-weight: 700;
+    font-size: 20px;
   }
   
   .form input,
   .form textarea,
   .form select {
     font: inherit;
-    padding: 0.25rem;
-    border: 2px solid teal;
+    padding: 0.8rem;
+    border: 1.5px solid rgb(219, 219, 219);
+    border-radius: 4px;
+    font-size: 18px;
+    box-sizing: border-box;
   }
-  
-  .actions {
+
+  .buttons {
     display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
   }
   
+ 
   .btn {
     font: inherit;
     cursor: pointer;
@@ -44,7 +45,11 @@
     color: white;
     border: 2px solid teal;
     font-weight: 700;
+    font-size: 18px;
     margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
   

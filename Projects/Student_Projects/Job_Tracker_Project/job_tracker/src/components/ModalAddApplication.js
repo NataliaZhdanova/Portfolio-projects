@@ -49,11 +49,11 @@ const ModalAddApplication = ({ callback, positiondata, onClose }) => {
     return (
         <div className={classes.modal}>
         <div className={classes.addnewform}>
-        <h1>Add new Application</h1>
+        <h1 className={classes.modalheader}>Add new Application</h1>
             <Form id="newApplicationForm" className={classes.form}>
             
                 <div className="form-control">
-                    <label htmlFor="positionTitle">Select Position:</label><br/>
+                    <label htmlFor="positionTitle">Select Position</label><br/>
                     <select value={selectedPosition} onChange={handlePositionChange} id="positionTitle" name="positionTitle" required>
                     <option value="">Select Position</option>
                         {positionData.map((position) => (
@@ -64,7 +64,7 @@ const ModalAddApplication = ({ callback, positiondata, onClose }) => {
                 <br/>
 
                 <div className="form-control">
-                    <label htmlFor="appStatus">Select application status:</label><br/>
+                    <label htmlFor="appStatus">Select application status</label><br/>
                     <select value={selectedStatus} onChange={handleStatusChange} id="appStatus" name="appStatus" required>
                         <option key="appStatus" value="">Select application status</option>
                         {status.map(element => (
@@ -75,13 +75,14 @@ const ModalAddApplication = ({ callback, positiondata, onClose }) => {
                 <br/>
 
                 <div className="form-control">
-                    <label htmlFor="submissionDate">Application Send Date:</label><br/>
+                    <label htmlFor="submissionDate">Application Send Date</label><br/>
                     <input type="date" id="submissionDate" name="submissionDate" required /><br/><br/>
                 </div>
                 <br/>
-                
-                <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
-                <button className={classes.btn} onClick={onClose}>Cancel</button>
+                <div className={classes.buttons}>
+                    <button className={classes.btncancel} onClick={onClose}>Cancel</button>
+                    <button className={classes.btnsave} type="submit" onClick={handleSubmit}>Save</button>
+                </div>  
             </Form>
             
         </div>

@@ -1,6 +1,6 @@
 // ApplicationsPage -> includes -> AllApplications
 // AllApplications -> is extended by -> NewApplicationCard
-// AllApplications -> ApplicationPage -> includes -> ApplicationCard 
+// AllApplications -> ApplicationPage -> includes -> ApplicationCard
 
 import { Form, useSubmit } from 'react-router-dom'
 import classes from "./NewApplicationForm.module.css";
@@ -88,8 +88,8 @@ console.log(companyData);
       <h1>Add new Application</h1>
       <Form id="newApplicationForm" className={classes.form}>
             
-        <div className="form-control">
-          <label htmlFor="companyName">Select company:</label><br/>
+        <div>
+          <label htmlFor="companyName">Select company</label><br/>
           <select value={selectedCompany} onChange={handleCompanyChange} id="companyName" name="companyName" required>
             <option value="">Select Company</option>
             {companyData.map(company => (
@@ -98,8 +98,8 @@ console.log(companyData);
           </select>
         </div>
         <br/>
-        <div className="form-control">
-          <label htmlFor="positionTitle">Select position:</label><br/>
+        <div>
+          <label htmlFor="positionTitle">Select position</label><br/>
           <select value={selectedPosition} onChange={handlePositionChange} id="positionTitle" name="positionTitle" required>
             <option value="">Select Position</option>
               {positions.map(position => (
@@ -108,8 +108,8 @@ console.log(companyData);
           </select>
         </div>
         <br/>
-        <div className="form-control">
-        <label htmlFor="appStatus">Select application status:</label><br/>
+        <div>
+        <label htmlFor="appStatus">Select application status</label><br/>
           <select value={selectedStatus} onChange={handleStatusChange} id="appStatus" name="appStatus" required>
             <option value="">Select application status</option>
               {status.map(element => (
@@ -118,13 +118,15 @@ console.log(companyData);
           </select>
         </div>
         <br/>
-        <div className="form-control">
-        <label htmlFor="submissionDate">Submission date:</label><br/>
+        <div>
+        <label htmlFor="submissionDate">Submission date</label><br/>
         <input type="date" id="submissionDate" name="submissionDate" required />
         </div>
         <br/>
-        <button className={classes.btn} type="submit" onClick={handleSubmit}>SAVE</button>
+        <div className={classes.buttons}>
         <button className={classes.btn} onClick={onCancel}>Cancel</button>
+        <button className={classes.btn} type="submit" onClick={handleSubmit}>Save</button>
+        </div>
       </Form>
             
     </div>
